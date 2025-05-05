@@ -2,9 +2,15 @@ package com.example.snapitout
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 class LoginActivity : AppCompatActivity() {
 
@@ -12,46 +18,108 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var passwordLogin: EditText
     private lateinit var loginBtn: Button
     private lateinit var goToSignUp: TextView
+    private lateinit var togglePasswordIcon: ImageView
+    private lateinit var googleSignInCustomBtn: ImageView // 🔄 Changed from SignInButton to ImageView
     private lateinit var mAuth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private var isPasswordVisible = false
+
+    private val RC_SIGN_IN = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        // Initialize UI elements
         emailLogin = findViewById(R.id.emailLogin)
         passwordLogin = findViewById(R.id.passwordLogin)
         loginBtn = findViewById(R.id.loginBtn)
         goToSignUp = findViewById(R.id.goToSignUp)
+        togglePasswordIcon = findViewById(R.id.togglePasswordVisibility)
+        googleSignInCustomBtn = findViewById(R.id.googleSignInCustomBtn) // ✅ Your custom button
         mAuth = FirebaseAuth.getInstance()
 
+        // Google Sign-In setup
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        // Use custom image button for Google Sign-In
+        googleSignInCustomBtn.setOnClickListener {
+            val signInIntent = googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, RC_SIGN_IN)
+        }
+
+        // Toggle password visibility
+        togglePasswordIcon.setOnClickListener {
+            if (isPasswordVisible) {
+                passwordLogin.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                togglePasswordIcon.setImageResource(R.drawable.ic_eye_closed)
+            } else {
+                passwordLogin.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                togglePasswordIcon.setImageResource(R.drawable.ic_eye_open)
+            }
+            isPasswordVisible = !isPasswordVisible
+            passwordLogin.setSelection(passwordLogin.text.length)
+        }
+
+        // Email/password login
         loginBtn.setOnClickListener {
             val email = emailLogin.text.toString()
             val password = passwordLogin.text.toString()
 
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please enter both email and password.", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Please enter both email and password.", Toast.LENGTH_SHORT).show()
             } else {
                 mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, CameraActivity::class.java)
-                            startActivity(intent)
+                            startActivity(Intent(this, CameraActivity::class.java))
                             finish()
                         } else {
-                            Toast.makeText(
-                                this,
-                                "Login Failed: ${task.exception?.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this, "Login Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
             }
         }
+
+        // Navigate to SignUpActivity
         goToSignUp.setOnClickListener {
-            val intent = Intent(this, SignUpActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, SignUpActivity::class.java))
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                if (account != null) {
+                    firebaseAuthWithGoogle(account.idToken!!)
+                }
+            } catch (e: ApiException) {
+                Toast.makeText(this, "Google sign in failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        mAuth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Google Login Successful", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, CameraActivity::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(this, "Authentication Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 }

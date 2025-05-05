@@ -1,38 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/camera_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:background="@drawable/bgbgbg"
+    tools:context=".CameraActivity">
 
-    <!-- Camera preview -->
-    <androidx.camera.view.PreviewView
-        android:id="@+id/camera_preview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <!-- Capture button -->
-    <ImageButton
-        android:id="@+id/capture_button"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="64dp"
-        android:background="@drawable/round_button"
-        android:contentDescription="Capture Photo" />
-
-    <!-- Preview of the captured photo (Bottom left corner, clickable) -->
+    <!-- Header Logo -->
     <ImageView
-        android:id="@+id/photo_preview"
+        android:id="@+id/logoImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
-        android:visibility="gone"
-        android:clickable="true"
-        android:focusable="true"
-        android:contentDescription="Captured Photo" />
-</RelativeLayout>
+        android:src="@drawable/logologo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- App Title -->
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="48dp"
+        android:fontFamily="serif"
+        android:text="Snap-IT-Out"
+        android:textColor="#F7A9C0"
+        android:textSize="36sp"
+        app:layout_constraintStart_toEndOf="@id/logoImage"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Info section with 4 Photos & Timer -->
+    <LinearLayout
+        android:id="@+id/filterInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/logoImage">
+
+        <!-- 4 Photos Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="100dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/four_photos" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4 Photos"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <!-- Timer Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <ImageView
+                android:layout_width="41dp"
+                android:layout_height="41dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/clock" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3 Seconds"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Preview and overlay stack -->
+    <FrameLayout
+        android:id="@+id/previewContainer"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/filterInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Camera Preview -->
+        <androidx.camera.view.PreviewView
+            android:id="@+id/cameraPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Captured Image View -->
+        <ImageView
+            android:id="@+id/capturedImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:visibility="gone" />
+
+        <!-- Filter Overlay -->
+        <ImageView
+            android:id="@+id/filterOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:background="@android:color/transparent" />
+
+        <!-- Countdown Text -->
+        <TextView
+            android:id="@+id/countdownText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            android:visibility="gone"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:shadowColor="#000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="4" />
+    </FrameLayout>
+
+    <!-- Filter instruction -->
+    <TextView
+        android:id="@+id/chooseFilterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Choose a filter"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/previewContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Filter buttons -->
+    <LinearLayout
+        android:id="@+id/filterButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/chooseFilterText">
+
+        <Button
+            android:id="@+id/normalButton"
+            android:layout_width="90dp"
+            android:layout_height="50dp"
+            android:backgroundTint="#FBACC2"
+            android:padding="1dp"
+            android:text="Normal"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/bwButton"
+            android:layout_width="90dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#C097F4"
+            android:text="BW"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/vintageButton"
+            android:layout_width="90dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#FBACC2"
+            android:padding="1dp"
+            android:text="Vintage"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/oldPhotoButton"
+            android:layout_width="90dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#C097F4"
+            android:padding="1dp"
+            android:text="Old Photo"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- Shutter Button -->
+    <ImageView
+        android:id="@+id/shutterButton"
+        android:layout_width="284dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="100dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_capture_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/previewContainer" />
+</androidx.constraintlayout.widget.ConstraintLayout>

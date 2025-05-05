@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SnapItOut</string>
+    <string name="default_web_client_id">12291873383-r04govuka2422u3oa8fftkve5a013q88.apps.googleusercontent.com</string>
+
 </resources>

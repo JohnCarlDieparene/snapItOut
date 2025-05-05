@@ -1,135 +1,236 @@
 package com.example.snapitout
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
+import android.graphics.BitmapFactory
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.content.ContentValues
-
-
+import androidx.lifecycle.LifecycleOwner
+import java.io.File
 
 class CameraActivity : AppCompatActivity() {
 
-    private lateinit var cameraProvider: ProcessCameraProvider
-    private lateinit var imageCapture: ImageCapture
-    private lateinit var preview: Preview
-    private lateinit var previewView: PreviewView
+    private lateinit var cameraPreview: PreviewView
+    private lateinit var filterOverlay: ImageView
+    private lateinit var shutterButton: ImageView
+    private lateinit var normalButton: Button
+    private lateinit var bwButton: Button
+    private lateinit var vintageButton: Button
+    private lateinit var oldPhotoButton: Button
+    private lateinit var chooseFilterText: TextView
+    private lateinit var countdownText: TextView
 
-    private lateinit var captureButton: ImageButton
-    private lateinit var photoPreview: ImageView
+    private val cameraPermissions = arrayOf(Manifest.permission.CAMERA)
+    private var imageCapture: ImageCapture? = null
+    private var currentFilter: ColorMatrixColorFilter? = null
+    private var capturedPhotosCount = 0
 
-    private var capturedPhotoUri: Uri? = null
-
-    private val CAMERA_PERMISSION_REQUEST_CODE = 101
-    private val STORAGE_PERMISSION_REQUEST_CODE = 102
+    private val permissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        if (permissions.getOrDefault(Manifest.permission.CAMERA, false)) {
+            startCamera()
+        } else {
+            Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
-        captureButton = findViewById(R.id.capture_button)
-        photoPreview = findViewById(R.id.photo_preview)
-        previewView = findViewById(R.id.camera_preview)
+        // Initialize Views
+        cameraPreview = findViewById(R.id.cameraPreview)
+        filterOverlay = findViewById(R.id.filterOverlay)
+        shutterButton = findViewById(R.id.shutterButton)
+        normalButton = findViewById(R.id.normalButton)
+        bwButton = findViewById(R.id.bwButton)
+        vintageButton = findViewById(R.id.vintageButton)
+        oldPhotoButton = findViewById(R.id.oldPhotoButton)
+        chooseFilterText = findViewById(R.id.chooseFilterText)
+        countdownText = findViewById(R.id.countdownText)
 
-        // Check camera permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        // Request permissions
+        if (isCameraPermissionGranted()) {
             startCamera()
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
+            permissionRequest.launch(cameraPermissions)
         }
 
-        // Check storage permission (Optional, if saving to external storage)
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            // Proceed with saving photo
-        } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_REQUEST_CODE)
-        }
+        // Set filter buttons
+        normalButton.setOnClickListener { applyFilter("normal") }
+        bwButton.setOnClickListener { applyFilter("bw") }
+        vintageButton.setOnClickListener { applyFilter("vintage") }
+        oldPhotoButton.setOnClickListener { applyFilter("oldPhoto") }
 
-        captureButton.setOnClickListener {
-            capturePhoto()
-        }
+        // Capture photo
+        shutterButton.setOnClickListener {
+            val imageCapture = imageCapture ?: return@setOnClickListener
+            val photoFile = File.createTempFile("snap_", ".jpg", cacheDir)
+            val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
-        // Handle click on captured photo preview to open gallery
-        photoPreview.setOnClickListener {
-            capturedPhotoUri?.let {
-                // Open the photo gallery
-                val intent = Intent(Intent.ACTION_VIEW, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                startActivity(intent)
-            }
+            imageCapture.takePicture(
+                outputOptions,
+                ContextCompat.getMainExecutor(this),
+                object : ImageCapture.OnImageSavedCallback {
+                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                        val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+                        runOnUiThread {
+                            // Show the captured photo
+                            filterOverlay.setImageBitmap(bitmap)
+                            filterOverlay.visibility = View.VISIBLE
+                            cameraPreview.visibility = View.INVISIBLE
+                            chooseFilterText.text = "Apply filter to captured image"
+                        }
+
+                        if (capturedPhotosCount < 4) {
+                            startCountdown()
+                        } else {
+                            Toast.makeText(this@CameraActivity, "4 photos captured", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onError(exception: ImageCaptureException) {
+                        Toast.makeText(this@CameraActivity, "Capture failed: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            )
         }
+    }
+
+    private fun isCameraPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this, Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-        cameraProviderFuture.addListener({
-            cameraProvider = cameraProviderFuture.get()
 
-            preview = Preview.Builder().build()
-            preview.setSurfaceProvider(previewView.surfaceProvider)
+        cameraProviderFuture.addListener({
+            val cameraProvider = cameraProviderFuture.get()
+
+            val preview = Preview.Builder().build()
+            preview.setSurfaceProvider(cameraPreview.surfaceProvider)
 
             imageCapture = ImageCapture.Builder().build()
 
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-            cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+            try {
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    this as LifecycleOwner, cameraSelector, preview, imageCapture
+                )
+            } catch (e: Exception) {
+                Toast.makeText(this, "Camera error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+
         }, ContextCompat.getMainExecutor(this))
     }
 
-    private fun capturePhoto() {
-        val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, "photo_${System.currentTimeMillis()}.jpg")
-            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/SnapItOut")
+    private fun applyFilter(filterType: String) {
+        val matrix = ColorMatrix()
+
+        when (filterType) {
+            "normal" -> matrix.setSaturation(1f)
+            "bw" -> matrix.setSaturation(0f)
+            "vintage" -> {
+                matrix.set(
+                    floatArrayOf(
+                        0.9f, 0.3f, 0.1f, 0f, 0f,
+                        0.2f, 0.7f, 0.2f, 0f, 0f,
+                        0.1f, 0.2f, 0.7f, 0f, 0f,
+                        0f, 0f, 0f, 1f, 0f
+                    )
+                )
+            }
+            "oldPhoto" -> {
+                matrix.set(
+                    floatArrayOf(
+                        1.3f, 0.3f, 0.2f, 0f, -50f,
+                        0.2f, 1.2f, 0.2f, 0f, -30f,
+                        0.1f, 0.1f, 1.1f, 0f, -10f,
+                        0f, 0f, 0f, 1f, 0f
+                    )
+                )
+            }
         }
 
-        val imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        // Apply the selected filter to the overlay (ImageView)
+        currentFilter = ColorMatrixColorFilter(matrix)
+        filterOverlay.colorFilter = currentFilter // Apply to the ImageView (filterOverlay)
 
-        val outputOptions = imageUri?.let { ImageCapture.OutputFileOptions.Builder(contentResolver.openOutputStream(it)!!).build() }
+        // Set the visibility of the filter overlay to make it visible
+        filterOverlay.visibility = View.VISIBLE
+    }
+
+    private fun startCountdown() {
+        runOnUiThread {
+            filterOverlay.visibility = View.GONE
+            cameraPreview.visibility = View.VISIBLE
+            chooseFilterText.text = "Choose a filter"
+        }
+
+        countdownText.visibility = View.VISIBLE
+        var countdown = 3
+        countdownText.text = "$countdown"
+
+        val countdownRunnable = object : Runnable {
+            override fun run() {
+                countdown--
+                countdownText.text = "$countdown"
+                if (countdown > 0) {
+                    countdownText.postDelayed(this, 1000)
+                } else {
+                    countdownText.visibility = View.GONE
+                    captureNextPhoto()
+                }
+            }
+        }
+
+        countdownText.postDelayed(countdownRunnable, 1000)
+    }
+
+    private fun captureNextPhoto() {
+        val imageCapture = imageCapture ?: return
+        val photoFile = File.createTempFile("snap_", ".jpg", cacheDir)
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
         imageCapture.takePicture(
-            outputOptions!!,
+            outputOptions,
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    capturedPhotoUri = imageUri
-                    photoPreview.setImageURI(imageUri)
-                    photoPreview.visibility = View.VISIBLE
-                    Toast.makeText(this@CameraActivity, "Photo saved", Toast.LENGTH_SHORT).show()
+                    val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+                    runOnUiThread {
+                        capturedPhotosCount++
+                        filterOverlay.setImageBitmap(bitmap)
+                        filterOverlay.visibility = View.VISIBLE
+                        cameraPreview.visibility = View.INVISIBLE
+                        chooseFilterText.text = "Apply filter to captured image"
+                    }
+
+                    if (capturedPhotosCount < 4) {
+                        startCountdown()
+                    } else {
+                        Toast.makeText(this@CameraActivity, "4 photos captured", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 override fun onError(exception: ImageCaptureException) {
-                    exception.printStackTrace()
-                    Toast.makeText(this@CameraActivity, "Photo capture failed: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@CameraActivity, "Capture failed: ${exception.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         )
-    }
-
-    // Handle permission result
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startCamera()
-            } else {
-                Toast.makeText(this, "Camera permission is required to use this feature.", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 }
