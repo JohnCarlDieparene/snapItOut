@@ -38,8 +38,7 @@
             android:inputType="textEmailAddress"
             android:padding="12dp"
             android:textColor="#FFFFFF"
-            android:textColorHint="#888888"
-            tools:ignore="HardcodedText" />
+            android:textColorHint="#888888"/>
 
         <!-- Password Input with Eye Icon -->
         <RelativeLayout
@@ -56,10 +55,8 @@
                 android:hint="Enter your password"
                 android:inputType="textPassword"
                 android:padding="12dp"
-                android:paddingEnd="48dp"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#888888"
-                tools:ignore="HardcodedText" />
+                android:textColorHint="#888888" />
 
             <ImageView
                 android:id="@+id/togglePasswordVisibility"
@@ -124,11 +121,10 @@
 
     <ImageView
         android:id="@+id/googleSignInCustomBtn"
-        android:layout_width="380dp"
+        android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:contentDescription="Sign in with Google"
         android:paddingRight="15dp"
-        android:src="@drawable/google_sign_in"
-        />
+        android:src="@drawable/google_sign_in" />
 
 </LinearLayout>

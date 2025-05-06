@@ -19,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginBtn: Button
     private lateinit var goToSignUp: TextView
     private lateinit var togglePasswordIcon: ImageView
-    private lateinit var googleSignInCustomBtn: ImageView // 🔄 Changed from SignInButton to ImageView
+    private lateinit var googleSignInCustomBtn: ImageView
     private lateinit var mAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private var isPasswordVisible = false
@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
         loginBtn = findViewById(R.id.loginBtn)
         goToSignUp = findViewById(R.id.goToSignUp)
         togglePasswordIcon = findViewById(R.id.togglePasswordVisibility)
-        googleSignInCustomBtn = findViewById(R.id.googleSignInCustomBtn) // ✅ Your custom button
+        googleSignInCustomBtn = findViewById(R.id.googleSignInCustomBtn)
         mAuth = FirebaseAuth.getInstance()
 
         // Google Sign-In setup
@@ -47,7 +47,11 @@ class LoginActivity : AppCompatActivity() {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        // Use custom image button for Google Sign-In
+        // ❗ Force sign out to avoid auto-login
+        googleSignInClient.signOut()
+        mAuth.signOut()
+
+        // Google Sign-In with custom button
         googleSignInCustomBtn.setOnClickListener {
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
@@ -78,7 +82,6 @@ class LoginActivity : AppCompatActivity() {
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
-                            // Change the destination to HomePageActivity
                             startActivity(Intent(this, HomePageActivity::class.java))
                             finish()
                         } else {
@@ -116,7 +119,6 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "Google Login Successful", Toast.LENGTH_SHORT).show()
-                    // Change the destination to HomePageActivity
                     startActivity(Intent(this, HomePageActivity::class.java))
                     finish()
                 } else {

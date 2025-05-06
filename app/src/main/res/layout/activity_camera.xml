@@ -14,7 +14,7 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolbar7"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="58dp"
         android:background="#FBACC3"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -27,20 +27,21 @@
 
     <ImageView
         android:id="@+id/homeButton"
-        android:layout_width="71dp"
-        android:layout_height="70dp"
+        android:layout_width="64dp"
+        android:layout_height="55dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.998"
         app:srcCompat="@drawable/home" />
+
 
     <ImageView
         android:id="@+id/imageView13"
-        android:layout_width="81dp"
-        android:layout_height="77dp"
+        android:layout_width="52dp"
+        android:layout_height="56dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.9"
@@ -49,17 +50,6 @@
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/album" />
 
-    <!-- App Title -->
-
-    <!-- Info section with 4 Photos & Timer -->
-
-    <!-- Preview and overlay stack -->
-
-    <!-- Filter instruction -->
-
-    <!-- Filter buttons -->
-
-    <!-- Shutter Button -->
     <ImageView
         android:id="@+id/logoImage"
         android:layout_width="100dp"
@@ -77,16 +67,16 @@
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="serif"
+        android:fontFamily="@font/baloo_tamma"
         android:text="Snap-IT-Out"
         android:textColor="#F7A9C0"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.787"
+        app:layout_constraintHorizontal_bias="0.758"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.058" />
+        app:layout_constraintVertical_bias="0.053" />
 
     <LinearLayout
         android:id="@+id/filterInfo"
@@ -98,16 +88,17 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.187">
+        app:layout_constraintVertical_bias="0.179">
 
         <!-- 4 Photos Info -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="65dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_background"
-            android:gravity="center_vertical"
+            android:gravity="center|center_vertical"
             android:orientation="horizontal"
             android:padding="12dp">
 
@@ -130,9 +121,10 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="65dp"
+            android:layout_marginEnd="20dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_background"
-            android:gravity="center_vertical"
+            android:gravity="center|center_vertical"
             android:orientation="horizontal"
             android:padding="5dp">
 
@@ -161,24 +153,19 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.43">
+        app:layout_constraintVertical_bias="0.441">
 
         <!-- Camera Preview -->
-
-        <!-- Filter Overlay -->
+        <ImageView
+            android:id="@+id/filterOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
 
         <androidx.camera.view.PreviewView
             android:id="@+id/cameraPreview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
-        <ImageView
-            android:id="@+id/filterOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:visibility="gone" />
 
         <!-- Countdown Text -->
         <TextView
@@ -231,6 +218,7 @@
             android:id="@+id/normalButton"
             android:layout_width="90dp"
             android:layout_height="50dp"
+            android:layout_marginStart="5dp"
             android:backgroundTint="#FBACC2"
             android:fontFamily="@font/lora"
             android:padding="1dp"
@@ -266,6 +254,7 @@
             android:layout_width="90dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="5dp"
             android:backgroundTint="#C097F4"
             android:fontFamily="@font/lora"
             android:padding="1dp"

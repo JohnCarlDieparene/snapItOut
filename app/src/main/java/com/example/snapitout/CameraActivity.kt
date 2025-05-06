@@ -3,7 +3,12 @@ package com.example.snapitout
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,10 +19,12 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import java.io.File
+import java.io.FileOutputStream
 
 class CameraActivity : AppCompatActivity() {
 
     private lateinit var cameraPreview: PreviewView
+    private lateinit var filterOverlay: ImageView
     private lateinit var shutterButton: ImageView
     private lateinit var normalButton: Button
     private lateinit var bwButton: Button
@@ -30,7 +37,9 @@ class CameraActivity : AppCompatActivity() {
     private val cameraPermissions = arrayOf(Manifest.permission.CAMERA)
     private var imageCapture: ImageCapture? = null
     private var capturedPhotosCount = 0
-    private val capturedPhotoPaths = mutableListOf<String>() // Store image paths
+    private val capturedPhotoPaths = mutableListOf<String>()
+    private var selectedFilter: String = "normal"
+    private var lensFacing = CameraSelector.LENS_FACING_BACK
 
     private val permissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -48,6 +57,7 @@ class CameraActivity : AppCompatActivity() {
 
         // Initialize Views
         cameraPreview = findViewById(R.id.cameraPreview)
+        filterOverlay = findViewById(R.id.filterOverlay)
         shutterButton = findViewById(R.id.shutterButton)
         normalButton = findViewById(R.id.normalButton)
         bwButton = findViewById(R.id.bwButton)
@@ -70,6 +80,22 @@ class CameraActivity : AppCompatActivity() {
             permissionRequest.launch(cameraPermissions)
         }
 
+        // Double tap to toggle front/back camera
+        cameraPreview.setOnTouchListener(object : View.OnTouchListener {
+            private var lastTapTime = 0L
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                if (event?.action == MotionEvent.ACTION_DOWN) {
+                    val currentTime = System.currentTimeMillis()
+                    if (currentTime - lastTapTime < 300) {
+                        toggleCamera()
+                    }
+                    lastTapTime = currentTime
+                }
+                return true
+            }
+        })
+
+        // Apply filter button logic
         normalButton.setOnClickListener { applyFilter("normal") }
         bwButton.setOnClickListener { applyFilter("bw") }
         vintageButton.setOnClickListener { applyFilter("vintage") }
@@ -97,7 +123,9 @@ class CameraActivity : AppCompatActivity() {
 
             imageCapture = ImageCapture.Builder().build()
 
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            val cameraSelector = CameraSelector.Builder()
+                .requireLensFacing(lensFacing)
+                .build()
 
             try {
                 cameraProvider.unbindAll()
@@ -111,9 +139,44 @@ class CameraActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
+    private fun toggleCamera() {
+        lensFacing = if (lensFacing == CameraSelector.LENS_FACING_BACK) {
+            CameraSelector.LENS_FACING_FRONT
+        } else {
+            CameraSelector.LENS_FACING_BACK
+        }
+        startCamera()
+    }
+
     private fun applyFilter(filterType: String) {
-        // Logic for applying filters to the camera preview
-        // This is for changing filter options but we won't display captured images in this activity.
+        selectedFilter = filterType
+
+        val colorMatrix = ColorMatrix()
+        when (filterType) {
+            "normal" -> {
+                filterOverlay.colorFilter = null
+                filterOverlay.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+            }
+            "bw" -> {
+                colorMatrix.setSaturation(0f)
+                filterOverlay.colorFilter = ColorMatrixColorFilter(colorMatrix)
+            }
+            "vintage" -> {
+                colorMatrix.setScale(1f, 0.9f, 0.7f, 1f)
+                filterOverlay.colorFilter = ColorMatrixColorFilter(colorMatrix)
+            }
+            "oldPhoto" -> {
+                colorMatrix.set(
+                    floatArrayOf(
+                        0.393f, 0.769f, 0.189f, 0f, 0f,
+                        0.349f, 0.686f, 0.168f, 0f, 0f,
+                        0.272f, 0.534f, 0.131f, 0f, 0f,
+                        0f, 0f, 0f, 1f, 0f
+                    )
+                )
+                filterOverlay.colorFilter = ColorMatrixColorFilter(colorMatrix)
+            }
+        }
     }
 
     private fun capturePhoto() {
@@ -126,14 +189,15 @@ class CameraActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    capturedPhotoPaths.add(photoFile.absolutePath) // Save path
-
+                    // Apply mirror effect to the captured photo
+                    mirrorImage(photoFile)
+                    capturedPhotoPaths.add(photoFile.absolutePath)
                     capturedPhotosCount++
                     if (capturedPhotosCount < 4) {
                         startCountdown()
                     } else {
                         Toast.makeText(this@CameraActivity, "4 photos captured", Toast.LENGTH_SHORT).show()
-                        goToEditingActivity() // Go to editing activity after capturing 4 photos
+                        goToEditingActivity()
                     }
                 }
 
@@ -142,6 +206,33 @@ class CameraActivity : AppCompatActivity() {
                 }
             }
         )
+    }
+
+    private fun mirrorImage(photoFile: File) {
+        try {
+            // Open the image file
+            val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+
+            // Create a matrix for the mirror effect
+            val matrix = android.graphics.Matrix()
+            matrix.preScale(-1f, 1f)  // Flip horizontally
+
+            // Create a new mirrored bitmap using the matrix
+            val mirroredBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+
+            // Save the mirrored image to the file
+            val outputStream = FileOutputStream(photoFile)
+            mirroredBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            outputStream.flush()
+            outputStream.close()
+
+            // Recycle the original and mirrored bitmaps to free memory
+            bitmap.recycle()
+            mirroredBitmap.recycle()
+
+        } catch (e: Exception) {
+            Toast.makeText(this@CameraActivity, "Error applying mirror effect: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun startCountdown() {
@@ -158,7 +249,7 @@ class CameraActivity : AppCompatActivity() {
                         countdownText.postDelayed(this, 1000)
                     } else {
                         countdownText.visibility = View.GONE
-                        capturePhoto() // Capture the next photo
+                        capturePhoto()
                     }
                 }
             }
@@ -170,7 +261,8 @@ class CameraActivity : AppCompatActivity() {
     private fun goToEditingActivity() {
         val intent = Intent(this, EditingActivity::class.java)
         intent.putStringArrayListExtra("photoPaths", ArrayList(capturedPhotoPaths))
+        intent.putExtra("selectedFilter", selectedFilter)
         startActivity(intent)
-        finish() // Close CameraActivity so user can't go back to it
+        finish()
     }
 }
