@@ -1,10 +1,8 @@
 package com.example.snapitout
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -20,7 +18,6 @@ import java.io.File
 class CameraActivity : AppCompatActivity() {
 
     private lateinit var cameraPreview: PreviewView
-    private lateinit var filterOverlay: ImageView
     private lateinit var shutterButton: ImageView
     private lateinit var normalButton: Button
     private lateinit var bwButton: Button
@@ -28,11 +25,12 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var oldPhotoButton: Button
     private lateinit var chooseFilterText: TextView
     private lateinit var countdownText: TextView
+    private lateinit var homeButton: ImageView
 
     private val cameraPermissions = arrayOf(Manifest.permission.CAMERA)
     private var imageCapture: ImageCapture? = null
-    private var currentFilter: ColorMatrixColorFilter? = null
     private var capturedPhotosCount = 0
+    private val capturedPhotoPaths = mutableListOf<String>() // Store image paths
 
     private val permissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -50,7 +48,6 @@ class CameraActivity : AppCompatActivity() {
 
         // Initialize Views
         cameraPreview = findViewById(R.id.cameraPreview)
-        filterOverlay = findViewById(R.id.filterOverlay)
         shutterButton = findViewById(R.id.shutterButton)
         normalButton = findViewById(R.id.normalButton)
         bwButton = findViewById(R.id.bwButton)
@@ -58,52 +55,28 @@ class CameraActivity : AppCompatActivity() {
         oldPhotoButton = findViewById(R.id.oldPhotoButton)
         chooseFilterText = findViewById(R.id.chooseFilterText)
         countdownText = findViewById(R.id.countdownText)
+        homeButton = findViewById(R.id.homeButton)
 
-        // Request permissions
+        homeButton.setOnClickListener {
+            val intent = Intent(this, HomePageActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+            finish()
+        }
+
         if (isCameraPermissionGranted()) {
             startCamera()
         } else {
             permissionRequest.launch(cameraPermissions)
         }
 
-        // Set filter buttons
         normalButton.setOnClickListener { applyFilter("normal") }
         bwButton.setOnClickListener { applyFilter("bw") }
         vintageButton.setOnClickListener { applyFilter("vintage") }
         oldPhotoButton.setOnClickListener { applyFilter("oldPhoto") }
 
-        // Capture photo
         shutterButton.setOnClickListener {
-            val imageCapture = imageCapture ?: return@setOnClickListener
-            val photoFile = File.createTempFile("snap_", ".jpg", cacheDir)
-            val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
-
-            imageCapture.takePicture(
-                outputOptions,
-                ContextCompat.getMainExecutor(this),
-                object : ImageCapture.OnImageSavedCallback {
-                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
-                        runOnUiThread {
-                            // Show the captured photo
-                            filterOverlay.setImageBitmap(bitmap)
-                            filterOverlay.visibility = View.VISIBLE
-                            cameraPreview.visibility = View.INVISIBLE
-                            chooseFilterText.text = "Apply filter to captured image"
-                        }
-
-                        if (capturedPhotosCount < 4) {
-                            startCountdown()
-                        } else {
-                            Toast.makeText(this@CameraActivity, "4 photos captured", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    override fun onError(exception: ImageCaptureException) {
-                        Toast.makeText(this@CameraActivity, "Capture failed: ${exception.message}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            )
+            capturePhoto()
         }
     }
 
@@ -139,69 +112,11 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun applyFilter(filterType: String) {
-        val matrix = ColorMatrix()
-
-        when (filterType) {
-            "normal" -> matrix.setSaturation(1f)
-            "bw" -> matrix.setSaturation(0f)
-            "vintage" -> {
-                matrix.set(
-                    floatArrayOf(
-                        0.9f, 0.3f, 0.1f, 0f, 0f,
-                        0.2f, 0.7f, 0.2f, 0f, 0f,
-                        0.1f, 0.2f, 0.7f, 0f, 0f,
-                        0f, 0f, 0f, 1f, 0f
-                    )
-                )
-            }
-            "oldPhoto" -> {
-                matrix.set(
-                    floatArrayOf(
-                        1.3f, 0.3f, 0.2f, 0f, -50f,
-                        0.2f, 1.2f, 0.2f, 0f, -30f,
-                        0.1f, 0.1f, 1.1f, 0f, -10f,
-                        0f, 0f, 0f, 1f, 0f
-                    )
-                )
-            }
-        }
-
-        // Apply the selected filter to the overlay (ImageView)
-        currentFilter = ColorMatrixColorFilter(matrix)
-        filterOverlay.colorFilter = currentFilter // Apply to the ImageView (filterOverlay)
-
-        // Set the visibility of the filter overlay to make it visible
-        filterOverlay.visibility = View.VISIBLE
+        // Logic for applying filters to the camera preview
+        // This is for changing filter options but we won't display captured images in this activity.
     }
 
-    private fun startCountdown() {
-        runOnUiThread {
-            filterOverlay.visibility = View.GONE
-            cameraPreview.visibility = View.VISIBLE
-            chooseFilterText.text = "Choose a filter"
-        }
-
-        countdownText.visibility = View.VISIBLE
-        var countdown = 3
-        countdownText.text = "$countdown"
-
-        val countdownRunnable = object : Runnable {
-            override fun run() {
-                countdown--
-                countdownText.text = "$countdown"
-                if (countdown > 0) {
-                    countdownText.postDelayed(this, 1000)
-                } else {
-                    countdownText.visibility = View.GONE
-                    captureNextPhoto()
-                }
-            }
-        }
-
-        countdownText.postDelayed(countdownRunnable, 1000)
-    }
-
-    private fun captureNextPhoto() {
+    private fun capturePhoto() {
         val imageCapture = imageCapture ?: return
         val photoFile = File.createTempFile("snap_", ".jpg", cacheDir)
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
@@ -211,19 +126,14 @@ class CameraActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
-                    runOnUiThread {
-                        capturedPhotosCount++
-                        filterOverlay.setImageBitmap(bitmap)
-                        filterOverlay.visibility = View.VISIBLE
-                        cameraPreview.visibility = View.INVISIBLE
-                        chooseFilterText.text = "Apply filter to captured image"
-                    }
+                    capturedPhotoPaths.add(photoFile.absolutePath) // Save path
 
+                    capturedPhotosCount++
                     if (capturedPhotosCount < 4) {
                         startCountdown()
                     } else {
                         Toast.makeText(this@CameraActivity, "4 photos captured", Toast.LENGTH_SHORT).show()
+                        goToEditingActivity() // Go to editing activity after capturing 4 photos
                     }
                 }
 
@@ -232,5 +142,35 @@ class CameraActivity : AppCompatActivity() {
                 }
             }
         )
+    }
+
+    private fun startCountdown() {
+        runOnUiThread {
+            countdownText.visibility = View.VISIBLE
+            var countdown = 3
+            countdownText.text = "$countdown"
+
+            val countdownRunnable = object : Runnable {
+                override fun run() {
+                    countdown--
+                    countdownText.text = "$countdown"
+                    if (countdown > 0) {
+                        countdownText.postDelayed(this, 1000)
+                    } else {
+                        countdownText.visibility = View.GONE
+                        capturePhoto() // Capture the next photo
+                    }
+                }
+            }
+
+            countdownText.postDelayed(countdownRunnable, 1000)
+        }
+    }
+
+    private fun goToEditingActivity() {
+        val intent = Intent(this, EditingActivity::class.java)
+        intent.putStringArrayListExtra("photoPaths", ArrayList(capturedPhotoPaths))
+        startActivity(intent)
+        finish() // Close CameraActivity so user can't go back to it
     }
 }

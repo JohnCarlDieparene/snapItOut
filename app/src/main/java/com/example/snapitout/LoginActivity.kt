@@ -78,7 +78,8 @@ class LoginActivity : AppCompatActivity() {
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this, CameraActivity::class.java))
+                            // Change the destination to HomePageActivity
+                            startActivity(Intent(this, HomePageActivity::class.java))
                             finish()
                         } else {
                             Toast.makeText(this, "Login Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
@@ -115,7 +116,8 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "Google Login Successful", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, CameraActivity::class.java))
+                    // Change the destination to HomePageActivity
+                    startActivity(Intent(this, HomePageActivity::class.java))
                     finish()
                 } else {
                     Toast.makeText(this, "Authentication Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()

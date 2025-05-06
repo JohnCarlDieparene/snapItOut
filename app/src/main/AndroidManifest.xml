@@ -58,6 +58,20 @@
         <activity
             android:name=".SignUpActivity"
             android:exported="true" />
+
+        <!-- 🏠 HomePage Activity (newly added) -->
+        <activity
+            android:name=".HomePageActivity"
+            android:exported="true" />
+
+        <!-- 🖌 Editing Activity (newly added) -->
+        <activity
+            android:name=".EditingActivity"
+            android:exported="true" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
