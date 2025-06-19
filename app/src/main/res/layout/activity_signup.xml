@@ -1,144 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FBAAC2"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal"
     tools:context=".SignUpActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- App Logo -->
+    <ImageView
+        android:id="@+id/appLogo"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:contentDescription="App Logo"
+        android:src="@drawable/snap_it_out_logo"
+        tools:ignore="HardcodedText" />
+
+    <!-- Title OUTSIDE Card -->
+    <TextView
+        android:id="@+id/createAccountTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/lora"
+        android:text="Create an account"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText" />
+
+    <!-- Form Card -->
+    <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/login_card_bg"
+        android:elevation="6dp"
         android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center_horizontal">
+        android:padding="20dp">
 
-        <!-- App Logo -->
-        <ImageView
-            android:id="@+id/appLogo"
-            android:layout_width="260dp"
-            android:layout_height="260dp"
-            android:contentDescription="App Logo"
-            android:src="@drawable/snap_it_out_logo"
-            tools:ignore="HardcodedText" />
-
-        <!-- Title OUTSIDE Card -->
-        <TextView
-            android:id="@+id/createAccountTitle"
-            android:layout_width="wrap_content"
+        <!-- Name Input -->
+        <EditText
+            android:id="@+id/nameSignUp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="@font/lora"
-            android:text="Create an account"
-            android:textColor="#FFFFFF"
-            android:textSize="34sp"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText" />
-
-        <!-- Form Card (LinearLayout acting like a card) -->
-        <LinearLayout
-            android:layout_width="320dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/login_card_bg"
-            android:elevation="6dp"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <!-- Name Input -->
-            <EditText
-                android:id="@+id/nameSignUp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/edit_text_bg"
-                android:fontFamily="@font/inter_extralight"
-                android:hint="Enter your name"
-                android:inputType="textPersonName"
-                android:padding="12dp"
-                android:textColor="@color/white"
-                android:textColorHint="#888888"
-                tools:ignore="HardcodedText" />
-
-            <!-- Email Input -->
-            <EditText
-                android:id="@+id/emailSignUp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/edit_text_bg"
-                android:fontFamily="@font/inter_extralight"
-                android:hint="Enter your email"
-                android:inputType="textEmailAddress"
-                android:padding="12dp"
-                android:textColor="@color/white"
-                android:textColorHint="#888888"
-                tools:ignore="HardcodedText" />
-
-            <!-- Password Input with Eye Icon -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
-
-                <EditText
-                    android:id="@+id/passwordSignUp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edit_text_bg"
-                    android:fontFamily="@font/inter_extralight"
-                    android:hint="Enter your password"
-                    android:inputType="textPassword"
-                    android:padding="12dp"
-                    android:paddingEnd="48dp"
-                    android:textColor="@color/white"
-                    android:textColorHint="#888888"
-                    tools:ignore="HardcodedText" />
-
-                <ImageView
-                    android:id="@+id/togglePasswordVisibility"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="12dp"
-                    android:contentDescription="Toggle Password Visibility"
-                    android:src="@drawable/ic_eye_closed" />
-            </RelativeLayout>
-
-            <!-- Sign Up Button -->
-            <Button
-                android:id="@+id/signUpBtn"
-                android:layout_width="250dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:backgroundTint="#C097F4"
-                android:fontFamily="@font/inter_semibold"
-                android:text="Sign Up"
-                android:textColor="#FFFFFF"
-                tools:ignore="HardcodedText" />
-        </LinearLayout>
-
-        <!-- Already have account? -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/edit_text_bg"
             android:fontFamily="@font/inter_extralight"
-            android:text="Already have an account?"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:hint="Enter your username"
+            android:inputType="textPersonName"
+            android:padding="12dp"
+            android:textColor="@color/white"
+            android:textColorHint="#888888"
             tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/goToLogin"
-            android:layout_width="wrap_content"
+        <!-- Email Input -->
+        <EditText
+            android:id="@+id/emailSignUp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/edit_text_bg"
+            android:fontFamily="@font/inter_extralight"
+            android:hint="Enter your email"
+            android:inputType="textEmailAddress"
+            android:padding="12dp"
+            android:textColor="@color/white"
+            android:textColorHint="#888888"
+            tools:ignore="HardcodedText" />
+
+        <!-- Password Input with Eye Icon -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/passwordSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:fontFamily="@font/inter_extralight"
+                android:hint="Enter your password"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:paddingEnd="48dp"
+                android:textColor="@color/white"
+                android:textColorHint="#888888"
+                tools:ignore="HardcodedText" />
+
+            <ImageView
+                android:id="@+id/togglePasswordVisibility"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="Toggle Password Visibility"
+                android:src="@drawable/ic_eye_closed" />
+        </RelativeLayout>
+
+        <!-- Sign Up Button -->
+        <Button
+            android:id="@+id/signUpBtn"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:backgroundTint="#C097F4"
             android:fontFamily="@font/inter_semibold"
-            android:text="Log In"
-            android:textColor="#B657FF"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:text="Sign Up"
+            android:textColor="#FFFFFF"
             tools:ignore="HardcodedText" />
     </LinearLayout>
-</ScrollView>
+
+    <!-- Already have account? -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:fontFamily="@font/inter_extralight"
+        android:text="Already have an account?"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/goToLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_semibold"
+        android:text="Log In"
+        android:textColor="#B657FF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText" />
+</LinearLayout>

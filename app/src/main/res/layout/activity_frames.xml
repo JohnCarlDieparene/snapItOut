@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F1ECF2"
-    tools:context=".StickersActivity">
+    tools:context=".FramesActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolbar"
@@ -92,7 +92,7 @@
             android:paddingBottom="50dp">
 
             <ImageView
-                android:id="@+id/frame1"
+                android:id="@+id/frameContainer"
                 android:layout_width="150dp"
                 android:layout_height="460dp"
                 android:layout_marginTop="20dp"
@@ -103,7 +103,51 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/frame2"
+                android:id="@+id/frameContainer3"
+                android:layout_width="150dp"
+                android:layout_height="460dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/sticker6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.12"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameContainer" />
+
+            <ImageView
+                android:id="@+id/frameContainer5"
+                android:layout_width="160dp"
+                android:layout_height="460dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/sticker6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.12"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameContainer3" />
+
+            <ImageView
+                android:id="@+id/frameContainer6"
+                android:layout_width="160dp"
+                android:layout_height="460dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/sticker6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.88"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameContainer4" />
+
+            <ImageView
+                android:id="@+id/frameContainer4"
+                android:layout_width="150dp"
+                android:layout_height="460dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/sticker6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.88"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameContainer2" />
+
+            <ImageView
+                android:id="@+id/frameContainer2"
                 android:layout_width="150dp"
                 android:layout_height="460dp"
                 android:layout_marginTop="20dp"
@@ -112,60 +156,16 @@
                 app:layout_constraintHorizontal_bias="0.88"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/frame3"
-                android:layout_width="150dp"
-                android:layout_height="460dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/sticker6"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.12"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/frame1" />
-
-            <ImageView
-                android:id="@+id/frame4"
-                android:layout_width="150dp"
-                android:layout_height="460dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/sticker6"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.88"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/frame2" />
-
-            <ImageView
-                android:id="@+id/frame5"
-                android:layout_width="160dp"
-                android:layout_height="460dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/sticker6"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.12"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/frame3" />
-
-            <ImageView
-                android:id="@+id/frame6"
-                android:layout_width="160dp"
-                android:layout_height="460dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/sticker6"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.88"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/frame4" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
     <TextView
-        android:id="@+id/StickersTxt"
+        android:id="@+id/FramesTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/lora"
-        android:text="Stickers"
+        android:text="Frames"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"

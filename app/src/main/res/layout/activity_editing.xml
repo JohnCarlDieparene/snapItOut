@@ -11,15 +11,14 @@
         android:id="@+id/frameContainer"
         android:layout_width="175dp"
         android:layout_height="508dp"
-        android:layout_marginStart="104dp"
-        android:layout_marginEnd="114dp"
+        android:layout_marginStart="109dp"
+        android:layout_marginEnd="109dp"
         android:background="@drawable/sticker6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.7">
+        app:layout_constraintVertical_bias="0.756">
 
         <ImageView
             android:id="@+id/mainFrame1"
@@ -76,23 +75,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View
-        android:id="@+id/colorCircle1"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_marginEnd="1dp"
-        android:background="@drawable/color1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/colorCircle2"
-        app:layout_constraintStart_toEndOf="@id/icon"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
-
     <ImageView
         android:id="@+id/sticker5"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_marginStart="15dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
         android:scaleType="centerCrop"
         android:src="@drawable/sticker5"
@@ -100,116 +88,176 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/sticker4"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.176" />
-
-    <View
-        android:id="@+id/colorCircle4"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:background="@drawable/color4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/colorCircle5"
-        app:layout_constraintStart_toEndOf="@+id/colorCircle3"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.049" />
+        app:layout_constraintVertical_bias="0.128" />
 
     <ImageView
-        android:id="@+id/icon"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
+        android:id="@+id/sticker2"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="2dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/select_color"
+        android:src="@drawable/sticker2"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sticker3"
+        app:layout_constraintStart_toEndOf="@+id/sticker1"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.049" />
+        app:layout_constraintVertical_bias="0.128" />
 
-    <View
-        android:id="@+id/colorCircle5"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:background="@drawable/color5"
+    <ImageView
+        android:id="@+id/sticker3"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="2dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sticker3"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/colorCircle6"
-        app:layout_constraintStart_toEndOf="@+id/colorCircle4"
+        app:layout_constraintEnd_toStartOf="@+id/sticker4"
+        app:layout_constraintStart_toEndOf="@+id/sticker2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
-
-    <View
-        android:id="@+id/colorCircle3"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:background="@drawable/color3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/colorCircle4"
-        app:layout_constraintStart_toEndOf="@+id/colorCircle2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
-
-    <View
-        android:id="@+id/colorCircle2"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:background="@drawable/color2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/colorCircle3"
-        app:layout_constraintStart_toEndOf="@+id/colorCircle1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintVertical_bias="0.128" />
 
     <ImageView
         android:id="@+id/sticker1"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
         android:scaleType="centerCrop"
         android:src="@drawable/sticker1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sticker2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.176" />
-
-    <View
-        android:id="@+id/colorCircle6"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_marginEnd="2dp"
-        android:background="@drawable/color6"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/colorCircle5"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
-
-    <TextView
-        android:id="@+id/stickersLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/lora"
-        android:text="Stickers"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.12" />
+        app:layout_constraintVertical_bias="0.128" />
 
     <ImageView
         android:id="@+id/sticker4"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_marginStart="18dp"
+        android:layout_marginTop="2dp"
         android:scaleType="centerCrop"
         android:src="@drawable/sticker4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sticker5"
         app:layout_constraintStart_toEndOf="@+id/sticker3"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.176" />
+        app:layout_constraintVertical_bias="0.128" />
+
+    <View
+        android:id="@+id/colorCircle6"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="2dp"
+        android:background="@drawable/color6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/colorCircle5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.048" />
+
+    <View
+        android:id="@+id/colorCircle5"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/color5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/colorCircle6"
+        app:layout_constraintStart_toEndOf="@+id/colorCircle4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.048" />
+
+    <View
+        android:id="@+id/colorCircle3"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/color3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/colorCircle4"
+        app:layout_constraintStart_toEndOf="@+id/colorCircle2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.048" />
+
+    <View
+        android:id="@+id/colorCircle2"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/color2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/colorCircle3"
+        app:layout_constraintStart_toEndOf="@+id/colorCircle1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.048" />
+
+    <View
+        android:id="@+id/colorCircle1"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="1dp"
+        android:background="@drawable/color1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/colorCircle2"
+        app:layout_constraintStart_toEndOf="@id/icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.048" />
+
+    <View
+        android:id="@+id/colorCircle4"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/color4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/colorCircle5"
+        app:layout_constraintStart_toEndOf="@+id/colorCircle3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.046" />
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/select_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.033"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.046" />
+
+    <TextView
+        android:id="@+id/stickersLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:fontFamily="@font/lora"
+        android:text="Stickers"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.087" />
+
+    <TextView
+        android:id="@+id/stickersLabel2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/lora"
+        android:text="Filters"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.174" />
 
     <TextView
         android:id="@+id/title"
@@ -218,43 +266,17 @@
         android:fontFamily="@font/lora"
         android:text="Frame Color"
         android:textColor="#000000"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.01" />
 
-    <ImageView
-        android:id="@+id/sticker2"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="14dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/sticker2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sticker3"
-        app:layout_constraintStart_toEndOf="@+id/sticker1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.176" />
-
-    <ImageView
-        android:id="@+id/sticker3"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="14dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/sticker3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sticker4"
-        app:layout_constraintStart_toEndOf="@+id/sticker2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.176" />
-
     <Button
         android:id="@+id/saveButton"
         android:layout_width="110dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_marginStart="37dp"
         android:backgroundTint="#F7A9C0"
         android:fontFamily="@font/lora"
@@ -262,18 +284,19 @@
         android:padding="1dp"
         android:text="Save"
         android:textColor="#000000"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/retakeButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.978" />
+        app:layout_constraintVertical_bias="0.978"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <Button
         android:id="@+id/retakeButton"
         android:layout_width="110dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_marginStart="98dp"
         android:layout_marginEnd="37dp"
         android:backgroundTint="#F7A9C0"
@@ -283,12 +306,70 @@
         android:padding="1dp"
         android:text="Retake"
         android:textColor="#000000"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/saveButton"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.978" />
+        app:layout_constraintVertical_bias="0.978"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.22">
+
+        <Button
+            android:id="@+id/NormalBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#F7A9C0"
+            android:fontFamily="@font/lora"
+            android:padding="0dp"
+            android:text="Normal"
+            android:textColor="@color/black"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/BWBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/lora"
+            android:padding="0dp"
+            android:text="BW"
+            android:textColor="@color/black"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/VintageBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#F7A9C0"
+            android:fontFamily="@font/lora"
+            android:padding="0dp"
+            android:text="Vintage"
+            android:textColor="@color/black"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/OldPhotoBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/lora"
+            android:padding="0dp"
+            android:text="Old Photo"
+            android:textColor="@color/black"
+            tools:ignore="TouchTargetSizeCheck" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

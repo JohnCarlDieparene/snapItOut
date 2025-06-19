@@ -5,8 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -24,13 +22,7 @@ import java.io.FileOutputStream
 class CameraActivity : AppCompatActivity() {
 
     private lateinit var cameraPreview: PreviewView
-    private lateinit var filterOverlay: ImageView
     private lateinit var shutterButton: ImageView
-    private lateinit var normalButton: Button
-    private lateinit var bwButton: Button
-    private lateinit var vintageButton: Button
-    private lateinit var oldPhotoButton: Button
-    private lateinit var chooseFilterText: TextView
     private lateinit var countdownText: TextView
     private lateinit var homeButton: ImageView
 
@@ -57,13 +49,7 @@ class CameraActivity : AppCompatActivity() {
 
         // Initialize Views
         cameraPreview = findViewById(R.id.cameraPreview)
-        filterOverlay = findViewById(R.id.filterOverlay)
         shutterButton = findViewById(R.id.shutterButton)
-        normalButton = findViewById(R.id.normalButton)
-        bwButton = findViewById(R.id.bwButton)
-        vintageButton = findViewById(R.id.vintageButton)
-        oldPhotoButton = findViewById(R.id.oldPhotoButton)
-        chooseFilterText = findViewById(R.id.chooseFilterText)
         countdownText = findViewById(R.id.countdownText)
         homeButton = findViewById(R.id.homeButton)
 
@@ -95,14 +81,9 @@ class CameraActivity : AppCompatActivity() {
             }
         })
 
-        // Apply filter button logic
-        normalButton.setOnClickListener { applyFilter("normal") }
-        bwButton.setOnClickListener { applyFilter("bw") }
-        vintageButton.setOnClickListener { applyFilter("vintage") }
-        oldPhotoButton.setOnClickListener { applyFilter("oldPhoto") }
 
         shutterButton.setOnClickListener {
-            capturePhoto()
+            startCountdown()
         }
     }
 
@@ -148,36 +129,6 @@ class CameraActivity : AppCompatActivity() {
         startCamera()
     }
 
-    private fun applyFilter(filterType: String) {
-        selectedFilter = filterType
-
-        val colorMatrix = ColorMatrix()
-        when (filterType) {
-            "normal" -> {
-                filterOverlay.colorFilter = null
-                filterOverlay.setBackgroundColor(android.graphics.Color.TRANSPARENT)
-            }
-            "bw" -> {
-                colorMatrix.setSaturation(0f)
-                filterOverlay.colorFilter = ColorMatrixColorFilter(colorMatrix)
-            }
-            "vintage" -> {
-                colorMatrix.setScale(1f, 0.9f, 0.7f, 1f)
-                filterOverlay.colorFilter = ColorMatrixColorFilter(colorMatrix)
-            }
-            "oldPhoto" -> {
-                colorMatrix.set(
-                    floatArrayOf(
-                        0.393f, 0.769f, 0.189f, 0f, 0f,
-                        0.349f, 0.686f, 0.168f, 0f, 0f,
-                        0.272f, 0.534f, 0.131f, 0f, 0f,
-                        0f, 0f, 0f, 1f, 0f
-                    )
-                )
-                filterOverlay.colorFilter = ColorMatrixColorFilter(colorMatrix)
-            }
-        }
-    }
 
     private fun capturePhoto() {
         val imageCapture = imageCapture ?: return
@@ -189,7 +140,6 @@ class CameraActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    // Apply mirror effect to the captured photo
                     mirrorImage(photoFile)
                     capturedPhotoPaths.add(photoFile.absolutePath)
                     capturedPhotosCount++
@@ -209,24 +159,22 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun mirrorImage(photoFile: File) {
+        if (lensFacing != CameraSelector.LENS_FACING_FRONT) {
+            // Only mirror if using the front camera
+            return
+        }
+
         try {
-            // Open the image file
             val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
-
-            // Create a matrix for the mirror effect
             val matrix = android.graphics.Matrix()
-            matrix.preScale(-1f, 1f)  // Flip horizontally
-
-            // Create a new mirrored bitmap using the matrix
+            matrix.preScale(-1f, 1f)
             val mirroredBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
 
-            // Save the mirrored image to the file
             val outputStream = FileOutputStream(photoFile)
             mirroredBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
             outputStream.flush()
             outputStream.close()
 
-            // Recycle the original and mirrored bitmaps to free memory
             bitmap.recycle()
             mirroredBitmap.recycle()
 

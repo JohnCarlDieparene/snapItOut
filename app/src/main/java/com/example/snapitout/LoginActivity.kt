@@ -1,6 +1,7 @@
 package com.example.snapitout
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
 import android.widget.*
@@ -81,6 +82,17 @@ class LoginActivity : AppCompatActivity() {
                 mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
+                            val user = mAuth.currentUser
+                            if (user != null) {
+                                // Save username and email to SharedPreferences
+                                val sharedPreferences = getSharedPreferences("SnapItOutPrefs", MODE_PRIVATE)
+                                sharedPreferences.edit().apply {
+                                    putString("username", user.displayName ?: "SnapItUser")
+                                    putString("email", user.email ?: "noemail@snapitout.com")
+                                    apply()
+                                }
+                            }
+
                             Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this, HomePageActivity::class.java))
                             finish()
@@ -118,6 +130,17 @@ class LoginActivity : AppCompatActivity() {
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    val user = mAuth.currentUser
+                    if (user != null) {
+                        // Save username and email to SharedPreferences
+                        val sharedPreferences = getSharedPreferences("SnapItOutPrefs", MODE_PRIVATE)
+                        sharedPreferences.edit().apply {
+                            putString("username", user.displayName ?: "SnapItUser")
+                            putString("email", user.email ?: "noemail@snapitout.com")
+                            apply()
+                        }
+                    }
+
                     Toast.makeText(this, "Google Login Successful", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, HomePageActivity::class.java))
                     finish()

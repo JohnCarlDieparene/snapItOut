@@ -50,24 +50,48 @@
         </activity>
 
         <!-- 📸 Camera Activity -->
-        <activity
-            android:name=".CameraActivity"
-            android:exported="true" />
+        <activity android:name=".CameraActivity" android:exported="true" />
 
         <!-- 📝 Sign-Up Activity -->
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="true" />
+        <activity android:name=".SignUpActivity" android:exported="true" />
 
-        <!-- 🏠 HomePage Activity (newly added) -->
-        <activity
-            android:name=".HomePageActivity"
-            android:exported="true" />
+        <!-- 🏠 HomePage Activity -->
+        <activity android:name=".HomePageActivity" android:exported="true" />
 
-        <!-- 🖌 Editing Activity (newly added) -->
-        <activity
-            android:name=".EditingActivity"
-            android:exported="true" />
+        <!-- 🖌 Editing Activity -->
+        <activity android:name=".EditingActivity" android:exported="true" />
+
+        <!-- 🧩 Stickers Activity -->
+        <activity android:name=".FramesActivity" android:exported="true" />
+
+        <!-- 👤 User Profile Activity -->
+        <activity android:name=".UserActivity" android:exported="true" />
+
+        <!-- 👤 Exclusive Features Activity -->
+        <activity android:name=".ExclusiveActivity" android:exported="true" />
+
+        <!-- 👤 Stickers Features Activity -->
+        <activity android:name=".StickersActivity" android:exported="true" />
+
+        <!-- 👤 Sharing Activity -->
+        <activity android:name=".SharingActivity" android:exported="true" />
+
+        <!-- 🧩 Album Activity -->
+        <activity android:name=".AlbumActivity" android:exported="true" />
+
+        <!-- 🧩 FullScreen Activity -->
+        <activity android:name=".FullScreenImageActivity" />
+
+        <!-- 🧩 Photo Collab Activity -->
+        <activity android:name=".PhotoCollabActivity" />
+
+        <!-- 🖌 Guest Book Activity -->
+        <activity android:name=".GuestBookActivity" android:exported="true" />
+
+        <!-- 🖌 Uploading Activity -->
+        <activity android:name=".UploadingActivity" android:exported="true" />
+
+
 
         <meta-data
             android:name="preloaded_fonts"

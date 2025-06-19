@@ -2,72 +2,84 @@ package com.example.snapitout
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract.Contacts.Photo
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.MaterialToolbar
 
 class HomePageActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home_page) // Replace with your actual XML file name
+        setContentView(R.layout.activity_home_page)
 
-        // Photobooth Section
+        // 📸 Photobooth Section
         val photoboothText: TextView = findViewById(R.id.textView7)
         val photoboothImage: ImageView = findViewById(R.id.camlogo)
+        val photoboothContainer: MaterialToolbar = findViewById(R.id.materialToolbar3)
 
-        // Frames Section (No action, just design)
+        // 🎨 Frames Section
         val framesText: TextView = findViewById(R.id.textView11)
         val framesImage: ImageView = findViewById(R.id.imageView6)
 
-        // Stickers Section (No action, just design)
+        // 🌟 Stickers Section
         val stickersText: TextView = findViewById(R.id.textView12)
         val stickersImage: ImageView = findViewById(R.id.imageView7)
 
-        // About Us Section (No action, just design)
-        val aboutUsText: TextView = findViewById(R.id.textView)
-        val aboutUsImage: ImageView = findViewById(R.id.imageView3)
+        // ℹ️ Photo Collab Section
+        val photoCollabText: TextView = findViewById(R.id.textView)
+        val photoCollabImage: ImageView = findViewById(R.id.imageView3)
 
-        // Album Section (No action, just design)
+        // 🖼 Album Section
         val albumImage: ImageView = findViewById(R.id.imageView8)
 
-        // Click Listeners for Photobooth Section
+        // 👤 User Profile Icon
+        val profileIcon: ImageView = findViewById(R.id.profileIcon)
+
+        // 👉 Navigate to CameraActivity
         photoboothText.setOnClickListener {
-            // Navigate to CameraActivity when Photobooth is clicked
             startActivity(Intent(this, CameraActivity::class.java))
         }
         photoboothImage.setOnClickListener {
-            // Navigate to CameraActivity when Photobooth image is clicked
+            startActivity(Intent(this, CameraActivity::class.java))
+        }
+        photoboothContainer.setOnClickListener {
             startActivity(Intent(this, CameraActivity::class.java))
         }
 
-        // Frames Section (Just design, no action)
+        // 👉 Navigate to FramesActivity
         framesText.setOnClickListener {
-            // No action, just a design
+            startActivity(Intent(this, FramesActivity::class.java))
         }
         framesImage.setOnClickListener {
-            // No action, just a design
+            startActivity(Intent(this, FramesActivity::class.java))
         }
 
-        // Stickers Section (Just design, no action)
+        // 👉 Navigate to StickersActivity
         stickersText.setOnClickListener {
-            // No action, just a design
+            startActivity(Intent(this, StickersActivity::class.java))
         }
         stickersImage.setOnClickListener {
-            // No action, just a design
+            startActivity(Intent(this, StickersActivity::class.java))
         }
 
-        // About Us Section (Just design, no action)
-        aboutUsText.setOnClickListener {
-            // No action, just a design
+        // ❌ PhotoCollab still no action
+        photoCollabText.setOnClickListener {
+            startActivity(Intent(this, PhotoCollabActivity::class.java))
         }
-        aboutUsImage.setOnClickListener {
-            // No action, just a design
+        photoCollabImage.setOnClickListener {
+            startActivity(Intent(this, PhotoCollabActivity::class.java))
         }
 
-        // Album Section (Just design, no action)
+        // ✅ Navigate to AlbumActivity
         albumImage.setOnClickListener {
-            // No action, just a design
+            startActivity(Intent(this, AlbumActivity::class.java))
+        }
+
+        // ✅ Navigate to UserActivity when profile icon is clicked
+        profileIcon.setOnClickListener {
+            startActivity(Intent(this, UserActivity::class.java))
         }
     }
 }

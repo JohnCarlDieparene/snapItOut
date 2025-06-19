@@ -38,12 +38,16 @@ android {
 }
 
 dependencies {
-    implementation ("com.google.android.gms:play-services-auth:21.0.0")
-    implementation ("com.google.firebase:firebase-auth:22.1.2")
 
-    implementation("androidx.cardview:cardview:1.0.0")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
+
+    implementation (libs.play.services.auth)
+    implementation (libs.firebase.auth)
+
+    implementation(libs.androidx.cardview)
     // Firebase Storage
-    implementation("com.google.firebase:firebase-storage:20.0.1")
+    implementation(libs.firebase.storage)
     // Other Firebase libraries (if needed)
 
     implementation(libs.androidx.core.ktx)
@@ -59,13 +63,14 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
 
     // ✅ If you also use PreviewView
-    implementation("androidx.camera:camera-view:1.3.0")
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.material3.android)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
-    implementation("com.google.firebase:firebase-analytics")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 }
 
