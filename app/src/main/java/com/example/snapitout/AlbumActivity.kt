@@ -8,7 +8,6 @@ import android.provider.MediaStore
 import android.util.TypedValue
 import android.widget.GridLayout
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import android.content.Intent
@@ -22,19 +21,18 @@ class AlbumActivity : AppCompatActivity() {
 
         val homeButton: ImageView = findViewById(R.id.imageView5)
 
-
         homeButton.setOnClickListener {
             startActivity(Intent(this, HomePageActivity::class.java))
             finish()
         }
 
-
         val imageContainer: GridLayout = findViewById(R.id.albumImageContainer)
         imageContainer.columnCount = 3 // Set the number of columns to 3
 
         val imageUris = getAllImagesFromSnapItOutFolder()
+        val uriStrings = imageUris.map { it.toString() } // Convert URIs to String list
 
-        for (uri in imageUris) {
+        for ((index, uri) in imageUris.withIndex()) {
             val imageView = ImageView(this)
 
             val sizeInDp = TypedValue.applyDimension(
@@ -58,12 +56,14 @@ class AlbumActivity : AppCompatActivity() {
                 .load(uri)
                 .into(imageView)
 
-            // Set a click listener to open the image in full screen
+            // Click listener to open image in full screen
             imageView.setOnClickListener {
                 val intent = Intent(this, FullScreenImageActivity::class.java)
-                intent.putExtra("imageUri", uri.toString()) // Pass the URI of the clicked image
+                intent.putStringArrayListExtra("imageUris", ArrayList(imageUris.map { it.toString() }))
+                intent.putExtra("currentIndex", index) // Use actual index
                 startActivity(intent)
             }
+
 
             imageContainer.addView(imageView)
         }
@@ -84,7 +84,6 @@ class AlbumActivity : AppCompatActivity() {
 
         val selection = "${MediaStore.Images.Media.RELATIVE_PATH} LIKE ?"
         val selectionArgs = arrayOf("%SnapItOut%")
-
         val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
 
         contentResolver.query(
@@ -105,6 +104,7 @@ class AlbumActivity : AppCompatActivity() {
 
         return imageUris
     }
+
     private fun hideSystemUI() {
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY

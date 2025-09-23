@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1ECF2"
+    android:background="#FAF1E2"
     tools:context=".ExclusiveActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolbar4"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:background="#FBACC3"
+        android:background="#E9D0BC"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +22,7 @@
         android:id="@+id/materialToolbar10"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:background="#FBACC3"
+        android:background="#E9D0BC"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,12 +32,14 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="64dp"
-        android:layout_height="55dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.99"
         app:srcCompat="@drawable/home" />
 
     <ImageView
@@ -63,14 +65,14 @@
 
     <ImageView
         android:id="@+id/imageView12"
-        android:layout_width="69dp"
-        android:layout_height="59dp"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/materialToolbar4"
-        app:layout_constraintHorizontal_bias="0.96"
+        app:layout_constraintHorizontal_bias="0.90"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.005"
         app:srcCompat="@drawable/user_profile" />
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -122,8 +124,8 @@
 
     <ImageView
         android:id="@+id/imageView14"
-        android:layout_width="129dp"
-        android:layout_height="136dp"
+        android:layout_width="109dp"
+        android:layout_height="111dp"
         app:layout_constraintBottom_toBottomOf="@+id/materialToolbar11"
         app:layout_constraintEnd_toEndOf="@+id/materialToolbar11"
         app:layout_constraintHorizontal_bias="0.045"
@@ -139,7 +141,7 @@
         android:fontFamily="@font/lora"
         android:gravity="center_vertical"
         android:text="Photobooth"
-        android:textColor="#F7A9C0"
+        android:textColor="#CF9984"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="@+id/materialToolbar11"
         app:layout_constraintEnd_toEndOf="@+id/materialToolbar11"
@@ -178,7 +180,7 @@
         android:gravity="center_horizontal"
         android:paddingTop="43dp"
         android:text=" Upload a Frame / Template"
-        android:textColor="#F7A9C0"
+        android:textColor="#CF9984"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="@+id/materialToolbar12"
         app:layout_constraintEnd_toEndOf="@+id/materialToolbar12"
@@ -204,7 +206,7 @@
         android:fontFamily="@font/lora"
         android:gravity="center"
         android:text="Guest Book"
-        android:textColor="#F7A9C0"
+        android:textColor="#CF9984"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="@+id/materialToolbar13"
         app:layout_constraintEnd_toEndOf="@+id/materialToolbar13"
@@ -225,16 +227,16 @@
 
     <TextView
         android:id="@+id/textView8"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/baloo_tamma"
         android:text="Exclusive Features"
-        android:textColor="#F7A9C0"
+        android:textColor="#CF9984"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.14"
         app:layout_constraintStart_toEndOf="@+id/imageView18"
         app:layout_constraintTop_toBottomOf="@id/materialToolbar4"
         app:layout_constraintVertical_bias="0.021" />

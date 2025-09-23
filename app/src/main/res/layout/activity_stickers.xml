@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1ECF2"
+    android:background="#FAF1E2"
     tools:context=".StickersActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolbar"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:background="#FBACC3"
+        android:background="#E9D0BC"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +23,7 @@
         android:id="@+id/materialToolbar2"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:background="#FBACC3"
+        android:background="#E9D0BC"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,14 +33,14 @@
 
     <ImageView
         android:id="@+id/profileIcon"
-        android:layout_width="69dp"
-        android:layout_height="59dp"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/materialToolbar"
-        app:layout_constraintHorizontal_bias="0.953"
+        app:layout_constraintHorizontal_bias="0.90"
         app:layout_constraintStart_toStartOf="@+id/materialToolbar"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.005"
         app:srcCompat="@drawable/user_profile" />
 
     <ImageView
@@ -57,22 +57,26 @@
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="64dp"
-        android:layout_height="55dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/materialToolbar2"
-        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.10"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.99"
         app:srcCompat="@drawable/home" />
 
     <ImageView
         android:id="@+id/imageView8"
-        android:layout_width="54dp"
-        android:layout_height="56dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/materialToolbar2"
-        app:layout_constraintHorizontal_bias="0.901"
-        app:layout_constraintStart_toStartOf="@+id/materialToolbar2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.90"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.997"
         app:srcCompat="@drawable/album"
         tools:ignore="MissingConstraints" />
 
@@ -137,7 +141,7 @@
 
             <ImageView
                 android:id="@+id/frame5"
-                android:layout_width="160dp"
+                android:layout_width="150dp"
                 android:layout_height="460dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/frame6"
@@ -148,7 +152,7 @@
 
             <ImageView
                 android:id="@+id/frame6"
-                android:layout_width="160dp"
+                android:layout_width="150dp"
                 android:layout_height="460dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/frame6"
