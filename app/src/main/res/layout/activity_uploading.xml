@@ -101,7 +101,7 @@
             android:layout_gravity="bottom|center"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            app:srcCompat="@drawable/sticker6" />
+            app:srcCompat="@drawable/frame6" />
 
     </FrameLayout>
 

@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FBAAC2"
+    android:background="#FAF1E2"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="24dp"
-    android:gravity="center_horizontal"
     tools:context=".SignUpActivity">
 
     <!-- App Logo -->
@@ -26,7 +26,7 @@
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/lora"
         android:text="Create an account"
-        android:textColor="#FFFFFF"
+        android:textColor="#CF9984"
         android:textSize="34sp"
         android:textStyle="bold"
         tools:ignore="HardcodedText" />
@@ -52,8 +52,8 @@
             android:hint="Enter your username"
             android:inputType="textPersonName"
             android:padding="12dp"
-            android:textColor="@color/white"
-            android:textColorHint="#888888"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
             tools:ignore="HardcodedText" />
 
         <!-- Email Input -->
@@ -67,8 +67,8 @@
             android:hint="Enter your email"
             android:inputType="textEmailAddress"
             android:padding="12dp"
-            android:textColor="@color/white"
-            android:textColorHint="#888888"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
             tools:ignore="HardcodedText" />
 
         <!-- Password Input with Eye Icon -->
@@ -87,8 +87,8 @@
                 android:inputType="textPassword"
                 android:padding="12dp"
                 android:paddingEnd="48dp"
-                android:textColor="@color/white"
-                android:textColorHint="#888888"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 tools:ignore="HardcodedText" />
 
             <ImageView
@@ -108,7 +108,7 @@
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:backgroundTint="#C097F4"
+            android:backgroundTint="#CF9984"
             android:fontFamily="@font/inter_semibold"
             android:text="Sign Up"
             android:textColor="#FFFFFF"
@@ -132,7 +132,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/inter_semibold"
         android:text="Log In"
-        android:textColor="#B657FF"
+        android:textColor="#085578"
         android:textSize="20sp"
         android:textStyle="bold"
         tools:ignore="HardcodedText" />

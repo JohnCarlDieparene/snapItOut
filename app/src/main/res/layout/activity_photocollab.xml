@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toStartOf="@+id/frameLayout2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.20">
+        app:layout_constraintVertical_bias="0.23000002">
 
         <androidx.camera.view.PreviewView
             android:id="@+id/cameraPreview1"
@@ -37,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/frameLayout1"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.20">
+        app:layout_constraintVertical_bias="0.23000002">
 
         <androidx.camera.view.PreviewView
             android:id="@+id/cameraPreview2"
@@ -60,7 +60,7 @@
         app:layout_constraintEnd_toStartOf="@+id/frameLayout4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.714">
+        app:layout_constraintVertical_bias="0.68">
 
         <androidx.camera.view.PreviewView
             android:id="@+id/cameraPreview3"
@@ -83,7 +83,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/frameLayout3"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.714">
+        app:layout_constraintVertical_bias="0.68">
 
         <androidx.camera.view.PreviewView
             android:id="@+id/cameraPreview4"
@@ -102,31 +102,51 @@
         android:id="@+id/materialToolbar14"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:background="#FBACC3"
+        android:background="#E9D0BC"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar17"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:background="#E9D0BC"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/imageView23"
-        android:layout_width="64dp"
-        android:layout_height="55dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.99"
         app:srcCompat="@drawable/home" />
 
     <ImageView
         android:id="@+id/imageView24"
-        android:layout_width="52dp"
-        android:layout_height="56dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.99"
         app:srcCompat="@drawable/album" />
 
     <Button
@@ -134,11 +154,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="76dp"
-        android:backgroundTint="#F7A9C0"
+        android:backgroundTint="#E9D0BC"
         android:fontFamily="@font/lora"
         android:padding="10dp"
         android:text="Select Photos"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.2"
@@ -149,12 +170,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="76dp"
-        android:backgroundTint="#F7A9C0"
+        android:backgroundTint="#E9D0BC"
         android:fontFamily="@font/lora"
         android:paddingLeft="45dp"
         android:paddingRight="45dp"
         android:text="Edit"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
@@ -162,11 +184,11 @@
 
     <ImageView
         android:id="@+id/imageView25"
-        android:layout_width="100dp"
-        android:layout_height="95dp"
+        android:layout_width="69dp"
+        android:layout_height="57dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
@@ -178,13 +200,13 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/baloo_tamma"
         android:text="Snap-It-Out"
-        android:textColor="#F7A9C0"
+        android:textColor="#CF9984"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.514"
-        app:layout_constraintStart_toEndOf="@+id/imageView25"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.03" />
+        app:layout_constraintVertical_bias="0.089" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

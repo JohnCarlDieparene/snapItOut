@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#FBACC2" /> <!-- You can change this color to match your design -->
+    <solid android:color="#E9D0BC" /> <!-- You can change this color to match your design -->
     <corners android:radius="16dp" /> <!-- Adjust the radius for roundness -->
 </shape>

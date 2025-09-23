@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FBAAC2"
+    android:background="#FAF1E2"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="24dp">
 
     <!-- App Logo -->
+
+    <!-- Container Box -->
     <ImageView
         android:id="@+id/appLogo"
         android:layout_width="260dp"
@@ -17,10 +19,10 @@
         android:src="@drawable/snap_it_out_logo"
         tools:ignore="HardcodedText" />
 
-    <!-- Container Box -->
     <LinearLayout
         android:layout_width="320dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:background="@drawable/login_card_bg"
         android:elevation="6dp"
         android:orientation="vertical"
@@ -37,8 +39,8 @@
             android:hint="Enter your email"
             android:inputType="textEmailAddress"
             android:padding="12dp"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#888888"/>
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" />
 
         <!-- Password Input with Eye Icon -->
         <RelativeLayout
@@ -55,8 +57,8 @@
                 android:hint="Enter your password"
                 android:inputType="textPassword"
                 android:padding="12dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#888888" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
 
             <ImageView
                 android:id="@+id/togglePasswordVisibility"
@@ -76,7 +78,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginBottom="12dp"
-            android:backgroundTint="#C097F4"
+            android:backgroundTint="#CF9984"
             android:fontFamily="@font/inter_semibold"
             android:text="Log In"
             android:textColor="#FFFFFF"
@@ -101,7 +103,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/inter_semibold"
             android:text="Sign Up"
-            android:textColor="#B657FF"
+            android:textColor="#085578"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
@@ -121,10 +123,11 @@
 
     <ImageView
         android:id="@+id/googleSignInCustomBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_width="152dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="5dp"
         android:contentDescription="Sign in with Google"
-        android:paddingRight="15dp"
         android:src="@drawable/google_sign_in" />
 
 </LinearLayout>

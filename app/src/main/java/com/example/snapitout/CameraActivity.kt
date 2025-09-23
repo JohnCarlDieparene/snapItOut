@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -15,6 +16,7 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.LifecycleOwner
 import java.io.File
 import java.io.FileOutputStream
@@ -47,7 +49,6 @@ class CameraActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
-        // Initialize Views
         cameraPreview = findViewById(R.id.cameraPreview)
         shutterButton = findViewById(R.id.shutterButton)
         countdownText = findViewById(R.id.countdownText)
@@ -66,7 +67,6 @@ class CameraActivity : AppCompatActivity() {
             permissionRequest.launch(cameraPermissions)
         }
 
-        // Double tap to toggle front/back camera
         cameraPreview.setOnTouchListener(object : View.OnTouchListener {
             private var lastTapTime = 0L
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -80,7 +80,6 @@ class CameraActivity : AppCompatActivity() {
                 return true
             }
         })
-
 
         shutterButton.setOnClickListener {
             startCountdown()
@@ -102,7 +101,10 @@ class CameraActivity : AppCompatActivity() {
             val preview = Preview.Builder().build()
             preview.setSurfaceProvider(cameraPreview.surfaceProvider)
 
-            imageCapture = ImageCapture.Builder().build()
+            val rotation = cameraPreview.display.rotation
+            imageCapture = ImageCapture.Builder()
+                .setTargetRotation(rotation)
+                .build()
 
             val cameraSelector = CameraSelector.Builder()
                 .requireLensFacing(lensFacing)
@@ -129,7 +131,6 @@ class CameraActivity : AppCompatActivity() {
         startCamera()
     }
 
-
     private fun capturePhoto() {
         val imageCapture = imageCapture ?: return
         val photoFile = File.createTempFile("snap_", ".jpg", cacheDir)
@@ -140,7 +141,11 @@ class CameraActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    mirrorImage(photoFile)
+                    val rotatedBitmap = rotateImageIfRequired(photoFile.absolutePath, lensFacing == CameraSelector.LENS_FACING_FRONT)
+                    val outputStream = FileOutputStream(photoFile)
+                    rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                    outputStream.close()
+
                     capturedPhotoPaths.add(photoFile.absolutePath)
                     capturedPhotosCount++
                     if (capturedPhotosCount < 4) {
@@ -156,31 +161,6 @@ class CameraActivity : AppCompatActivity() {
                 }
             }
         )
-    }
-
-    private fun mirrorImage(photoFile: File) {
-        if (lensFacing != CameraSelector.LENS_FACING_FRONT) {
-            // Only mirror if using the front camera
-            return
-        }
-
-        try {
-            val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
-            val matrix = android.graphics.Matrix()
-            matrix.preScale(-1f, 1f)
-            val mirroredBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-
-            val outputStream = FileOutputStream(photoFile)
-            mirroredBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            outputStream.flush()
-            outputStream.close()
-
-            bitmap.recycle()
-            mirroredBitmap.recycle()
-
-        } catch (e: Exception) {
-            Toast.makeText(this@CameraActivity, "Error applying mirror effect: ${e.message}", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun startCountdown() {
@@ -210,7 +190,50 @@ class CameraActivity : AppCompatActivity() {
         val intent = Intent(this, EditingActivity::class.java)
         intent.putStringArrayListExtra("photoPaths", ArrayList(capturedPhotoPaths))
         intent.putExtra("selectedFilter", selectedFilter)
+        intent.putExtra("isFrontCamera", lensFacing == CameraSelector.LENS_FACING_FRONT) // ✅ Send mirror info
         startActivity(intent)
         finish()
+    }
+
+    private fun hideSystemUI() {
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                )
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            hideSystemUI()
+        }
+    }
+
+    // ✅ EXIF fix + Mirror if front cam
+    private fun rotateImageIfRequired(filePath: String, mirror: Boolean = false): Bitmap {
+        val bitmap = BitmapFactory.decodeFile(filePath)
+        val exif = ExifInterface(filePath)
+        val orientation = exif.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_NORMAL
+        )
+
+        val matrix = Matrix()
+        when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+        }
+
+        if (mirror) {
+            matrix.postScale(-1f, 1f)
+            matrix.postTranslate(bitmap.width.toFloat(), 0f)
+        }
+
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 }

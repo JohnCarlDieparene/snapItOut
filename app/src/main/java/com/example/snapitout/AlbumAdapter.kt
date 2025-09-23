@@ -29,7 +29,7 @@ class AlbumAdapter(private val context: Context, private val imageUris: List<Str
             .into(holder.imageView)
 
         holder.imageView.setOnClickListener {
-            val intent = Intent(context, FullscreenImageActivity::class.java)
+            val intent = Intent(context, FullScreenImageActivity::class.java)
             intent.putExtra("imageUri", uri)
             context.startActivity(intent)
         }
@@ -37,4 +37,5 @@ class AlbumAdapter(private val context: Context, private val imageUris: List<Str
 
 
     override fun getItemCount(): Int = imageUris.size
+
 }

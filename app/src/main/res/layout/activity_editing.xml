@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1ECF2">
+    android:background="#FAF1E2">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +13,7 @@
         android:layout_height="508dp"
         android:layout_marginStart="109dp"
         android:layout_marginEnd="109dp"
-        android:background="@drawable/sticker6"
+        android:background="@drawable/frame6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +22,7 @@
 
         <ImageView
             android:id="@+id/mainFrame1"
-            android:layout_width="140dp"
+            android:layout_width="141dp"
             android:layout_height="110dp"
             android:layout_marginStart="17dp"
             android:scaleType="centerCrop"
@@ -35,7 +35,7 @@
 
         <ImageView
             android:id="@+id/mainFrame2"
-            android:layout_width="140dp"
+            android:layout_width="141dp"
             android:layout_height="110dp"
             android:layout_marginStart="17dp"
             android:scaleType="centerCrop"
@@ -48,7 +48,7 @@
 
         <ImageView
             android:id="@+id/mainFrame3"
-            android:layout_width="140dp"
+            android:layout_width="141dp"
             android:layout_height="110dp"
             android:layout_marginStart="17dp"
             android:scaleType="centerCrop"
@@ -61,7 +61,7 @@
 
         <ImageView
             android:id="@+id/mainFrame4"
-            android:layout_width="140dp"
+            android:layout_width="141dp"
             android:layout_height="110dp"
             android:layout_marginStart="17dp"
             android:layout_marginTop="7dp"
@@ -278,7 +278,7 @@
         android:layout_width="110dp"
         android:layout_height="40dp"
         android:layout_marginStart="37dp"
-        android:backgroundTint="#F7A9C0"
+        android:backgroundTint="#E9D0BC"
         android:fontFamily="@font/lora"
         android:includeFontPadding="false"
         android:padding="1dp"
@@ -299,7 +299,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="98dp"
         android:layout_marginEnd="37dp"
-        android:backgroundTint="#F7A9C0"
+        android:backgroundTint="#E9D0BC"
         android:fontFamily="@font/lora"
         android:gravity="center"
         android:includeFontPadding="false"
@@ -330,7 +330,7 @@
             android:id="@+id/NormalBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#F7A9C0"
+            android:backgroundTint="#E9D0BC"
             android:fontFamily="@font/lora"
             android:padding="0dp"
             android:text="Normal"
@@ -342,6 +342,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:backgroundTint="#E9D0BC"
             android:fontFamily="@font/lora"
             android:padding="0dp"
             android:text="BW"
@@ -353,7 +354,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:backgroundTint="#F7A9C0"
+            android:backgroundTint="#E9D0BC"
             android:fontFamily="@font/lora"
             android:padding="0dp"
             android:text="Vintage"
@@ -365,6 +366,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:backgroundTint="#E9D0BC"
             android:fontFamily="@font/lora"
             android:padding="0dp"
             android:text="Old Photo"

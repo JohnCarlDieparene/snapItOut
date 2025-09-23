@@ -30,6 +30,8 @@ class EditingActivity : AppCompatActivity() {
     private lateinit var stickers: List<ImageView>
     private lateinit var mainFrames: List<ImageView>
 
+    private lateinit var frameContainer: View
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editing)
@@ -41,6 +43,8 @@ class EditingActivity : AppCompatActivity() {
         btnBW = findViewById(R.id.BWBtn)
         btnVintage = findViewById(R.id.VintageBtn)
         btnOld = findViewById(R.id.OldPhotoBtn)
+
+        frameContainer = findViewById(R.id.frameContainer)
 
         colorCircles = listOf(
             findViewById(R.id.colorCircle1),
@@ -75,7 +79,7 @@ class EditingActivity : AppCompatActivity() {
             }
         } else if (!photoPaths.isNullOrEmpty()) {
             for (i in 0 until minOf(4, photoPaths.size)) {
-                val bitmap = BitmapFactory.decodeFile(photoPaths[i])
+                val bitmap = BitmapFactory.decodeFile(photoPaths[i]) // ✅ No rotation applied
                 mainFrames[i].setImageBitmap(bitmap)
             }
         } else {
@@ -120,21 +124,38 @@ class EditingActivity : AppCompatActivity() {
             applyFilterToAllFrames(ColorMatrixColorFilter(matrix))
         }
 
+        val backgroundImages = listOf(
+            R.drawable.frame1,
+            R.drawable.frame2,
+            R.drawable.frame3,
+            R.drawable.frame4,
+            R.drawable.frame5,
+            R.drawable.frame6
+        )
+
         colorCircles.forEachIndexed { index, view ->
             view.setOnClickListener {
-                Toast.makeText(this, "Color ${index + 1} selected", Toast.LENGTH_SHORT).show()
+                frameContainer.setBackgroundResource(backgroundImages[index])
+                Toast.makeText(this, "Background ${index + 1} applied", Toast.LENGTH_SHORT).show()
             }
         }
 
+        val stickerBackgrounds = listOf(
+            R.drawable.fsticker1,
+            R.drawable.fsticker2,
+            R.drawable.fsticker3,
+            R.drawable.fsticker4,
+            R.drawable.fsticker5
+        )
+
         stickers.forEachIndexed { index, sticker ->
             sticker.setOnClickListener {
-                Toast.makeText(this, "Sticker ${index + 1} selected", Toast.LENGTH_SHORT).show()
+                frameContainer.setBackgroundResource(stickerBackgrounds[index])
+                Toast.makeText(this, "Sticker ${index + 1} applied as background", Toast.LENGTH_SHORT).show()
             }
         }
 
         saveButton.setOnClickListener {
-            val frameContainer = findViewById<View>(R.id.frameContainer)
-
             val bitmap = Bitmap.createBitmap(
                 frameContainer.width,
                 frameContainer.height,
@@ -198,6 +219,24 @@ class EditingActivity : AppCompatActivity() {
             val intent = Intent(this, CameraActivity::class.java)
             startActivity(intent)
             finish()
+        }
+    }
+
+    private fun hideSystemUI() {
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                )
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            hideSystemUI()
         }
     }
 }
