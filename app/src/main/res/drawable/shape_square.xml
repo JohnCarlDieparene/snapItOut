@@ -1,0 +1,19 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="1080dp"
+    android:height="1080dp"
+    android:viewportWidth="1080"
+    android:viewportHeight="1080">
+
+    <!-- White filled rounded square -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M120,120
+            L960,120
+            A40,40 0 0 1 1000,160
+            L1000,920
+            A40,40 0 0 1 960,960
+            L120,960
+            A40,40 0 0 1 80,920
+            L80,160
+            A40,40 0 0 1 120,120 Z" />
+</vector>

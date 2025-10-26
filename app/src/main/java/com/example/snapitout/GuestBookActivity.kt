@@ -18,7 +18,7 @@ class GuestBookActivity : AppCompatActivity() {
         setContentView(R.layout.activity_guestbook)
 
         // Bottom nav icons
-        homeIcon = findViewById(R.id.imageView20)
+        homeIcon = findViewById(R.id.imageView5)
         albumIcon = findViewById(R.id.imageView21)
         backArrow = findViewById(R.id.imageView29)
 

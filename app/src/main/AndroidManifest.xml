@@ -88,8 +88,11 @@
         <!-- 🖌 Guest Book Activity -->
         <activity android:name=".GuestBookActivity" android:exported="true" />
 
-        <!-- 🖌 Uploading Activity -->
-        <activity android:name=".UploadingActivity" android:exported="true" />
+        <!-- 🖌 Templates Activity -->
+        <activity android:name=".TemplatesActivity" android:exported="true" />
+
+        <!-- 🖌 Edit Templates Activity -->
+        <activity android:name=".EditTemplateActivity" android:exported="true" />
 
 
 

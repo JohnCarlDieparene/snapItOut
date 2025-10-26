@@ -68,7 +68,7 @@ class ExclusiveActivity : AppCompatActivity() {
         }
 
         titleUploadFrame.setOnClickListener {
-            val intent = Intent(this, UploadingActivity::class.java)
+            val intent = Intent(this, TemplatesActivity::class.java)
             startActivity(intent)
             finish()
         }

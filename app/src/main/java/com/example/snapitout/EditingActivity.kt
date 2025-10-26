@@ -79,7 +79,7 @@ class EditingActivity : AppCompatActivity() {
             }
         } else if (!photoPaths.isNullOrEmpty()) {
             for (i in 0 until minOf(4, photoPaths.size)) {
-                val bitmap = BitmapFactory.decodeFile(photoPaths[i]) // ✅ No rotation applied
+                val bitmap = BitmapFactory.decodeFile(photoPaths[i])
                 mainFrames[i].setImageBitmap(bitmap)
             }
         } else {
@@ -93,25 +93,21 @@ class EditingActivity : AppCompatActivity() {
         }
 
         btnNormal.setOnClickListener { applyFilterToAllFrames(null) }
-
         btnBW.setOnClickListener {
-            val matrix = ColorMatrix()
-            matrix.setSaturation(0f)
+            val matrix = ColorMatrix().apply { setSaturation(0f) }
             applyFilterToAllFrames(ColorMatrixColorFilter(matrix))
         }
-
         btnVintage.setOnClickListener {
             val matrix = ColorMatrix(
                 floatArrayOf(
                     0.9f, 0.3f, 0.1f, 0f, 0f,
-                    0.0f, 0.9f, 0.1f, 0f, 0f,
-                    0.0f, 0.3f, 0.7f, 0f, 0f,
+                    0f, 0.9f, 0.1f, 0f, 0f,
+                    0f, 0.3f, 0.7f, 0f, 0f,
                     0f, 0f, 0f, 1f, 0f
                 )
             )
             applyFilterToAllFrames(ColorMatrixColorFilter(matrix))
         }
-
         btnOld.setOnClickListener {
             val matrix = ColorMatrix(
                 floatArrayOf(
@@ -125,14 +121,9 @@ class EditingActivity : AppCompatActivity() {
         }
 
         val backgroundImages = listOf(
-            R.drawable.frame1,
-            R.drawable.frame2,
-            R.drawable.frame3,
-            R.drawable.frame4,
-            R.drawable.frame5,
-            R.drawable.frame6
+            R.drawable.frame1, R.drawable.frame2, R.drawable.frame3,
+            R.drawable.frame4, R.drawable.frame5, R.drawable.frame6
         )
-
         colorCircles.forEachIndexed { index, view ->
             view.setOnClickListener {
                 frameContainer.setBackgroundResource(backgroundImages[index])
@@ -141,13 +132,9 @@ class EditingActivity : AppCompatActivity() {
         }
 
         val stickerBackgrounds = listOf(
-            R.drawable.fsticker1,
-            R.drawable.fsticker2,
-            R.drawable.fsticker3,
-            R.drawable.fsticker4,
-            R.drawable.fsticker5
+            R.drawable.fsticker1, R.drawable.fsticker2,
+            R.drawable.fsticker3, R.drawable.fsticker4, R.drawable.fsticker5
         )
-
         stickers.forEachIndexed { index, sticker ->
             sticker.setOnClickListener {
                 frameContainer.setBackgroundResource(stickerBackgrounds[index])
@@ -156,87 +143,73 @@ class EditingActivity : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener {
-            val bitmap = Bitmap.createBitmap(
-                frameContainer.width,
-                frameContainer.height,
-                Bitmap.Config.ARGB_8888
-            )
-            val canvas = Canvas(bitmap)
-            frameContainer.draw(canvas)
-
-            val filename = "SnapIt_${System.currentTimeMillis()}.jpg"
-            val savedImagePaths = mutableListOf<String>()
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                val contentValues = ContentValues().apply {
-                    put(MediaStore.Images.Media.DISPLAY_NAME, filename)
-                    put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-                    put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/SnapItOut")
-                    put(MediaStore.Images.Media.IS_PENDING, 1)
-                }
-
-                val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-                uri?.let {
-                    contentResolver.openOutputStream(it)?.use { outputStream ->
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                    }
-                    contentValues.clear()
-                    contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
-                    contentResolver.update(uri, contentValues, null, null)
-                    savedImagePaths.add(uri.toString())
-                }
-            } else {
-                val storageDir = File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "SnapItOut"
-                )
-                if (!storageDir.exists()) storageDir.mkdirs()
-                val file = File(storageDir, filename)
-                FileOutputStream(file).use { out ->
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-                }
-                savedImagePaths.add(file.absolutePath)
-            }
-
-            if (savedImagePaths.isNotEmpty()) {
-                Toast.makeText(this, "Image saved!", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this, SharingActivity::class.java)
-                intent.putStringArrayListExtra("sharedImagePaths", ArrayList(savedImagePaths))
-
-                val albumIntent = Intent(this, AlbumActivity::class.java)
-                albumIntent.putStringArrayListExtra("albumImagePaths", ArrayList(savedImagePaths))
-                startActivity(albumIntent)
-
-                startActivity(intent)
-                finish()
-            } else {
-                Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show()
-            }
+            saveCollage()
         }
 
         retakeButton.setOnClickListener {
-            val intent = Intent(this, CameraActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, CameraActivity::class.java))
             finish()
         }
     }
 
+    private fun saveCollage() {
+        // Capture the frameContainer as a bitmap
+        val bitmap = Bitmap.createBitmap(
+            frameContainer.width,
+            frameContainer.height,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        frameContainer.draw(canvas)
+
+        val filename = "SnapIt_Collage_${System.currentTimeMillis()}.jpg"
+        val albumFolder = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "SnapItOut")
+        if (!albumFolder.exists()) albumFolder.mkdirs()
+
+        // Save collage to your app’s album folder (same as single pictures)
+        val file = File(albumFolder, filename)
+        try {
+            FileOutputStream(file).use { out ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+            }
+
+            // ✅ Also add it to MediaStore (so it appears in device gallery)
+            val values = ContentValues().apply {
+                put(MediaStore.Images.Media.TITLE, filename)
+                put(MediaStore.Images.Media.DISPLAY_NAME, filename)
+                put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+                put(MediaStore.Images.Media.DATA, file.absolutePath)
+            }
+            contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+
+            Toast.makeText(this, "Collage saved!", Toast.LENGTH_SHORT).show()
+
+            // ✅ Open AlbumActivity to refresh and show both single + collage images
+            val albumIntent = Intent(this, AlbumActivity::class.java)
+            albumIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(albumIntent)
+            finish()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Failed to save collage", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
     private fun hideSystemUI() {
         window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        or View.SYSTEM_UI_FLAG_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                        View.SYSTEM_UI_FLAG_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 )
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            hideSystemUI()
-        }
+        if (hasFocus) hideSystemUI()
     }
 }

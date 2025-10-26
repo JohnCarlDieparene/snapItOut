@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,17 +8,17 @@
     android:background="#F1ECF2"
     tools:context=".AlbumActivity">
 
+    <!-- Top Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolbar"
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:background="#E9D0BC"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Title -->
     <TextView
         android:id="@+id/AlbumTxt"
         android:layout_width="wrap_content"
@@ -30,15 +31,38 @@
         app:layout_constraintTop_toTopOf="@id/materialToolbar"
         app:layout_constraintBottom_toBottomOf="@id/materialToolbar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Profile Icon -->
+    <ImageView
+        android:id="@+id/profileIcon"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@id/materialToolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/materialToolbar"
+        app:srcCompat="@drawable/user_profile" />
+
+    <!-- Logo -->
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="69dp"
+        android:layout_height="57dp"
+        app:layout_constraintBottom_toBottomOf="@id/materialToolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/materialToolbar"
+        app:srcCompat="@drawable/logologo" />
+
+    <!-- Scrollable Grid -->
     <ScrollView
+        android:id="@+id/albumScroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/materialToolbar"
-        app:layout_constraintBottom_toTopOf="@id/materialToolbar2"
+        app:layout_constraintBottom_toTopOf="@id/collageButtonGroup"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -53,6 +77,72 @@
             android:useDefaultMargins="true" />
     </ScrollView>
 
+    <!-- Collage Buttons (Moved Outside Bottom Toolbar) -->
+    <LinearLayout
+        android:id="@+id/collageButtonGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@id/materialToolbar2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/autoCollageButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Auto"
+            android:textStyle="bold"
+            android:fontFamily="@font/lora"
+            android:backgroundTint="#FFB74D"
+            android:textColor="@color/black"
+            app:cornerRadius="12dp"
+            android:layout_marginEnd="4dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/scrapbookCollageButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Scrapbook"
+            android:textStyle="bold"
+            android:fontFamily="@font/lora"
+            android:backgroundTint="#FFB74D"
+            android:textColor="@color/black"
+            app:cornerRadius="12dp"
+            android:layout_marginHorizontal="4dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/shapeCollageButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Shape"
+            android:textStyle="bold"
+            android:fontFamily="@font/lora"
+            android:backgroundTint="#FFB74D"
+            android:textColor="@color/black"
+            app:cornerRadius="12dp"
+            android:layout_marginHorizontal="4dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/aiScrapbookButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="AI Scrapbook"
+            android:textStyle="bold"
+            android:fontFamily="@font/lora"
+            android:backgroundTint="#FFB74D"
+            android:textColor="@color/black"
+            app:cornerRadius="12dp"
+            android:layout_marginStart="4dp" />
+    </LinearLayout>
+
+    <!-- Bottom Toolbar (Home Button Inside) -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolbar2"
         android:layout_width="match_parent"
@@ -60,41 +150,22 @@
         android:background="#E9D0BC"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <ImageView
-        android:id="@+id/profileIcon"
-        android:layout_width="45dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="@id/materialToolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/materialToolbar"
-        app:srcCompat="@drawable/user_profile" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="69dp"
-        android:layout_height="57dp"
-        app:layout_constraintBottom_toBottomOf="@id/materialToolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.15"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/materialToolbar"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/logologo" />
-
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintBottom_toBottomOf="@id/materialToolbar2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.99"
-        app:srcCompat="@drawable/home" />
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical|start"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="Home Button"
+            android:focusable="true"
+            android:padding="6dp"
+            app:srcCompat="@drawable/home"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="9dp" />
+    </com.google.android.material.appbar.MaterialToolbar>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
