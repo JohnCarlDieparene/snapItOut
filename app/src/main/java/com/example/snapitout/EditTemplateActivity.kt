@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -31,6 +32,9 @@ class EditTemplateActivity : AppCompatActivity() {
     private lateinit var navHome: ImageButton
     private lateinit var navAlbum: ImageButton
 
+    private var isEditMode = false
+    private var existingSlots: ArrayList<String>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_template)
@@ -44,12 +48,19 @@ class EditTemplateActivity : AppCompatActivity() {
         navHome = findViewById(R.id.navHome)
         navAlbum = findViewById(R.id.navAlbum)
 
+        // ✅ Check if launched in edit mode
+        isEditMode = intent.getBooleanExtra("IS_EDIT_MODE", false)
+        existingSlots = intent.getStringArrayListExtra("TEMPLATE_SLOTS")
+        if (isEditMode && !existingSlots.isNullOrEmpty()) {
+            loadExistingTemplate(existingSlots!!)
+        }
+
+        // 🟩 Add text feature
         btnAddText.setOnClickListener {
             val inputField = EditText(this).apply {
                 hint = "Type your text"
                 setPadding(16)
             }
-
             AlertDialog.Builder(this)
                 .setTitle("Enter Text")
                 .setView(inputField)
@@ -72,6 +83,7 @@ class EditTemplateActivity : AppCompatActivity() {
                 .show()
         }
 
+        // 🟩 Add sticker feature
         btnAddSticker.setOnClickListener {
             val categories = arrayOf("Faces", "Symbols", "Celebration", "Upload Image")
             val emojiMap = mapOf(
@@ -107,14 +119,10 @@ class EditTemplateActivity : AppCompatActivity() {
                 .show()
         }
 
-        btnAddImage.setOnClickListener {
-            Toast.makeText(this, "Image picker not implemented yet", Toast.LENGTH_SHORT).show()
-        }
-
+        // 🟩 Background color picker
         btnColorPicker.setOnClickListener {
             val colors = arrayOf("White", "Light Pink", "Sky Blue", "Mint", "Gray")
             val colorValues = arrayOf("#FFFFFF", "#FFEBEE", "#E3F2FD", "#E0F7FA", "#EEEEEE")
-
             AlertDialog.Builder(this)
                 .setTitle("Choose Background Color")
                 .setItems(colors) { _, which ->
@@ -123,15 +131,27 @@ class EditTemplateActivity : AppCompatActivity() {
                 .show()
         }
 
+        // 🟩 Save button
         saveButton.setOnClickListener {
-            val savedUriString = saveFrameAsImage() // returns saved image Uri string or null
+            val savedUriString = saveFrameAsImage()
             val resultIntent = Intent().apply {
                 putExtra("templateCreated", true)
-                putExtra("TEMPLATE_ID", System.currentTimeMillis())
-                putExtra("TEMPLATE_NAME", savedUriString?.substringAfterLast('/') ?: "My Template")
-                val slots = arrayListOf<String>()
-                savedUriString?.let { slots.add(it) }
-                putStringArrayListExtra("TEMPLATE_SLOTS", slots)
+                if (isEditMode) {
+                    // ✅ Update existing template
+                    putExtra("IS_EDIT_MODE", true)
+                    putExtra("TEMPLATE_ID", intent.getLongExtra("TEMPLATE_ID", System.currentTimeMillis()))
+                    putExtra("TEMPLATE_NAME", intent.getStringExtra("TEMPLATE_NAME"))
+                    val updatedSlots = arrayListOf<String>()
+                    savedUriString?.let { updatedSlots.add(it) }
+                    putStringArrayListExtra("TEMPLATE_SLOTS", updatedSlots)
+                } else {
+                    // ✅ New template
+                    putExtra("TEMPLATE_ID", System.currentTimeMillis())
+                    putExtra("TEMPLATE_NAME", savedUriString?.substringAfterLast('/') ?: "My Template")
+                    val slots = arrayListOf<String>()
+                    savedUriString?.let { slots.add(it) }
+                    putStringArrayListExtra("TEMPLATE_SLOTS", slots)
+                }
             }
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
@@ -145,6 +165,26 @@ class EditTemplateActivity : AppCompatActivity() {
         navAlbum.setOnClickListener {
             startActivity(Intent(this, AlbumActivity::class.java))
             finish()
+        }
+    }
+
+    // ✅ Loads existing template images when editing
+    private fun loadExistingTemplate(slots: ArrayList<String>) {
+        for (uriStr in slots) {
+            try {
+                val imageView = ImageView(this).apply {
+                    setImageURI(Uri.parse(uriStr))
+                    layoutParams = ConstraintLayout.LayoutParams(
+                        ConstraintLayout.LayoutParams.MATCH_PARENT,
+                        ConstraintLayout.LayoutParams.MATCH_PARENT
+                    )
+                    adjustViewBounds = true
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+                }
+                frameContainer.addView(imageView)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -181,8 +221,8 @@ class EditTemplateActivity : AppCompatActivity() {
         val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val filename = "template_$timestamp.jpg"
         val relativePath = "Pictures/SnapItOut/Templates"
-        val resolver = contentResolver
 
+        val resolver = contentResolver
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, filename)
             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
@@ -193,7 +233,8 @@ class EditTemplateActivity : AppCompatActivity() {
         }
 
         val collection = MediaStore.Images.Media.getContentUri(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) MediaStore.VOLUME_EXTERNAL_PRIMARY else "external"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) MediaStore.VOLUME_EXTERNAL_PRIMARY
+            else "external"
         )
 
         val uri = try {
@@ -203,9 +244,7 @@ class EditTemplateActivity : AppCompatActivity() {
             null
         }
 
-        if (uri == null) {
-            return null
-        }
+        if (uri == null) return null
 
         return try {
             resolver.openOutputStream(uri)?.use { out ->
@@ -219,7 +258,6 @@ class EditTemplateActivity : AppCompatActivity() {
                 values.put(MediaStore.Images.Media.IS_PENDING, 0)
                 resolver.update(uri, values, null, null)
             }
-
             uri.toString()
         } catch (e: Exception) {
             e.printStackTrace()

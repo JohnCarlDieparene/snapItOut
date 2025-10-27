@@ -94,6 +94,7 @@
         <!-- 🖌 Edit Templates Activity -->
         <activity android:name=".EditTemplateActivity" android:exported="true" />
 
+        <activity android:name=".TemplateViewerActivity" />
 
 
         <meta-data

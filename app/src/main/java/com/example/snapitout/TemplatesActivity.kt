@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import android.widget.GridLayout
 import android.widget.ImageButton
@@ -29,6 +28,7 @@ class TemplatesActivity : AppCompatActivity() {
     private val prefsName = "templates_prefs"
     private val keyTemplates = "key_templates"
 
+    // ✅ For creating new templates
     private val editLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK && result.data != null) {
             val data = result.data!!
@@ -40,6 +40,26 @@ class TemplatesActivity : AppCompatActivity() {
                 val newTemplate = Template(id = id, name = name, slotUris = slots)
                 addTemplateAtTop(newTemplate)
                 Toast.makeText(this, "Template saved", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // ✅ For viewing and updating templates
+    private val viewLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+            val data = result.data!!
+            val updatedId = data.getLongExtra("TEMPLATE_ID", -1L)
+            val updatedName = data.getStringExtra("TEMPLATE_NAME")
+            val updatedSlots = data.getStringArrayListExtra("TEMPLATE_SLOTS")
+
+            if (updatedId != -1L && updatedName != null && updatedSlots != null) {
+                val index = templates.indexOfFirst { it.id == updatedId }
+                if (index != -1) {
+                    templates[index] = Template(updatedId, updatedName, updatedSlots)
+                    saveTemplatesToPrefs()
+                    refreshGridFromTemplates()
+                    Toast.makeText(this, "Template updated", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -57,7 +77,6 @@ class TemplatesActivity : AppCompatActivity() {
         refreshGridFromTemplates()
         updateNoTemplatesUi()
 
-        // Keep original floating button as a fallback opener, but hide it to avoid duplicate UI
         floatingBtnDoc.visibility = View.GONE
 
         findViewById<ImageButton>(R.id.btnBack).setOnClickListener { finish() }
@@ -77,46 +96,52 @@ class TemplatesActivity : AppCompatActivity() {
     private fun refreshGridFromTemplates() {
         gridContainer.removeAllViews()
 
-        // Add thumbnails for each template
-        for ((index, template) in templates.withIndex()) {
+        val screenWidth = resources.displayMetrics.widthPixels
+        val gridPadding = (8 * resources.displayMetrics.density).toInt() * 2
+        val itemMargin = (8 * resources.displayMetrics.density).toInt()
+        val totalMargins = itemMargin * 2 * 3
+        val availableWidth = screenWidth - gridPadding - totalMargins
+        val itemSize = availableWidth / 3
+
+        for (template in templates) {
             val uriString = template.slotUris.firstOrNull()
             val imageView = ImageView(this).apply {
                 layoutParams = GridLayout.LayoutParams().apply {
-                    width = resources.displayMetrics.widthPixels / 3 - 16
-                    height = width
-                    setMargins(8, 8, 8, 8)
-                    setGravity(Gravity.CENTER)
+                    width = itemSize
+                    height = itemSize
+                    setMargins(itemMargin, itemMargin, itemMargin, itemMargin)
                 }
                 scaleType = ImageView.ScaleType.CENTER_CROP
                 contentDescription = template.name
                 if (uriString != null) {
-                    try { setImageURI(Uri.parse(uriString)) } catch (_: Exception) {}
+                    try {
+                        setImageURI(Uri.parse(uriString))
+                    } catch (_: Exception) {
+                        setBackgroundColor(0xFFCCCCCC.toInt())
+                    }
                 } else {
-                    // placeholder background if no image
                     setBackgroundColor(0xFFCCCCCC.toInt())
                 }
                 setOnClickListener {
-                    val intent = Intent(this@TemplatesActivity, EditTemplateActivity::class.java).apply {
+                    val intent = Intent(this@TemplatesActivity, TemplateViewerActivity::class.java).apply {
                         putExtra("TEMPLATE_ID", template.id)
                         putExtra("TEMPLATE_NAME", template.name)
                         putStringArrayListExtra("TEMPLATE_SLOTS", ArrayList(template.slotUris))
                     }
-                    editLauncher.launch(intent)
+                    viewLauncher.launch(intent)
                 }
             }
             gridContainer.addView(imageView)
         }
 
-        // Add the "Add Template" tile at the end of the grid
         val addTile = ImageButton(this).apply {
             layoutParams = GridLayout.LayoutParams().apply {
-                width = resources.displayMetrics.widthPixels / 3 - 16
-                height = width
-                setMargins(8, 8, 8, 8)
-                setGravity(Gravity.CENTER)
+                width = itemSize
+                height = itemSize
+                setMargins(itemMargin, itemMargin, itemMargin, itemMargin)
             }
             scaleType = ImageView.ScaleType.CENTER_INSIDE
-            setImageResource(R.drawable.addbtn) // ensure this drawable exists
+            setImageResource(R.drawable.addbtn)
             background = null
             contentDescription = "Create Template"
             setOnClickListener {
@@ -131,7 +156,7 @@ class TemplatesActivity : AppCompatActivity() {
     private fun updateNoTemplatesUi() {
         if (templates.isEmpty()) {
             tvNoTemplates.visibility = View.VISIBLE
-            gridContainer.visibility = View.VISIBLE // show grid with only add tile
+            gridContainer.visibility = View.VISIBLE
             rvTemplates.visibility = View.GONE
         } else {
             tvNoTemplates.visibility = View.GONE

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootTemplateViewer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5EDE0"
+    tools:context=".TemplateViewerActivity">
+
+    <!-- Back Button -->
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:rotationY="180"
+        android:scaleType="fitCenter"
+        android:src="@drawable/arrow2"
+        android:contentDescription="Back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Decor Icon -->
+    <ImageView
+        android:id="@+id/imgDecor"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/frames"
+        android:contentDescription="Decor"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintTop_toTopOf="@id/btnBack" />
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/templateNameView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lora"
+        android:gravity="center"
+        android:text="Template Name"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/imgDecor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- ScrollView containing Grid -->
+    <ScrollView
+        android:id="@+id/scrollArea"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/templateNameView"
+        app:layout_constraintBottom_toTopOf="@id/btnEditTemplate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <GridLayout
+            android:id="@+id/gridViewer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:alignmentMode="alignBounds"
+            android:columnOrderPreserved="false"
+            android:padding="12dp"
+            android:useDefaultMargins="false"
+            android:gravity="center" />
+    </ScrollView>
+
+    <!-- Edit Template Button -->
+    <Button
+        android:id="@+id/btnEditTemplate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit Template"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#2196F3"
+        android:fontFamily="@font/lora"
+        android:textSize="16sp"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="10dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
