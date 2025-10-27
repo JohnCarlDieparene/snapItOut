@@ -1,14 +1,12 @@
 package com.example.snapitout
 
-import android.app.Activity
-import android.content.ContentValues
 import android.content.Intent
 import android.graphics.*
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -152,50 +150,55 @@ class EditingActivity : AppCompatActivity() {
         }
     }
 
+    /** ✅ Updated saveCollage() */
     private fun saveCollage() {
-        // Capture the frameContainer as a bitmap
-        val bitmap = Bitmap.createBitmap(
-            frameContainer.width,
-            frameContainer.height,
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        frameContainer.draw(canvas)
+        frameContainer.post {
+            val width = frameContainer.width
+            val height = frameContainer.height
 
-        val filename = "SnapIt_Collage_${System.currentTimeMillis()}.jpg"
-        val albumFolder = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "SnapItOut")
-        if (!albumFolder.exists()) albumFolder.mkdirs()
-
-        // Save collage to your app’s album folder (same as single pictures)
-        val file = File(albumFolder, filename)
-        try {
-            FileOutputStream(file).use { out ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+            if (width == 0 || height == 0) {
+                Toast.makeText(this, "Layout not ready, try again", Toast.LENGTH_SHORT).show()
+                return@post
             }
 
-            // ✅ Also add it to MediaStore (so it appears in device gallery)
-            val values = ContentValues().apply {
-                put(MediaStore.Images.Media.TITLE, filename)
-                put(MediaStore.Images.Media.DISPLAY_NAME, filename)
-                put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-                put(MediaStore.Images.Media.DATA, file.absolutePath)
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            frameContainer.draw(canvas)
+
+            val filename = "SnapIt_Collage_${System.currentTimeMillis()}.jpg"
+
+            try {
+                // ✅ Use the same album folder as AlbumActivity
+                val albumFolder = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "SnapItOut")
+                if (!albumFolder.exists()) albumFolder.mkdirs()
+
+                val file = File(albumFolder, filename)
+                val outputStream = FileOutputStream(file)
+                val success = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                outputStream.flush()
+                outputStream.close()
+
+                if (!success) throw Exception("Bitmap compression failed")
+
+                // ✅ Notify the system gallery (optional)
+                val uri = Uri.fromFile(file)
+                sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
+
+                Toast.makeText(this, "Collage saved to album!", Toast.LENGTH_SHORT).show()
+
+                // ✅ Launch SharingActivity with saved collage URI
+                val shareIntent = Intent(this, SharingActivity::class.java).apply {
+                    putExtra("saved_collage_uri", uri.toString())
+                }
+                startActivity(shareIntent)
+                finish()
+
+            } catch (e: Exception) {
+                Log.e("SaveCollage", "Error saving collage", e)
+                Toast.makeText(this, "Failed to save collage: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-            contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-
-            Toast.makeText(this, "Collage saved!", Toast.LENGTH_SHORT).show()
-
-            // ✅ Open AlbumActivity to refresh and show both single + collage images
-            val albumIntent = Intent(this, AlbumActivity::class.java)
-            albumIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(albumIntent)
-            finish()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "Failed to save collage", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     private fun hideSystemUI() {
         window.decorView.systemUiVisibility = (
